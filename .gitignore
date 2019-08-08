@@ -4,6 +4,8 @@
 lib/utilities/credentials.dart
 # Build files produced by an XCode build 
 ios/Build
+# VSCode launch configurations
+.vscode/launch.json
 
 ## Original .gitignore
 
