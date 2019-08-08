@@ -1,3 +1,10 @@
+## My added ignores 
+
+# API Credentials
+lib/utilities/credentials.dart
+
+## Original .gitignore
+
 # Miscellaneous
 *.class
 *.log

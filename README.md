@@ -1,16 +1,23 @@
 # ptv_clone
 
-A new Flutter project.
+A clone of the PTV app in Flutter.
 
-## Getting Started
+## API Key 
 
-This project is a starting point for a Flutter application.
+Follow the instructions at https://www.ptv.vic.gov.au/footer/data-and-reporting/datasets/ptv-timetable-api/ to obtain your credentials, then add the file `lib/utilities/credentials.dart` with contents: 
 
-A few resources to get you started if this is your first Flutter project:
+```Dart
+const Map<String, String> credentials = <String, String>{
+  'uid': 'your user id',
+  'key': 'your api key'
+};
+```
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+the file is already in `.gitignore` so there's no danger of adding your credentials to version control
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Swagger 
+
+Swagger docs for the PTV API: https://timetableapi.ptv.vic.gov.au/swagger/ui/index 
+
+Swagger codegen info: https://github.com/swagger-api/swagger-codegen
+
