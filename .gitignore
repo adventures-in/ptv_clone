@@ -2,6 +2,8 @@
 
 # API Credentials
 lib/utilities/credentials.dart
+# Build files produced by an XCode build 
+ios/Build
 
 ## Original .gitignore
 
