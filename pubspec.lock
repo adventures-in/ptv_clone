@@ -29,6 +29,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.14.11"
+  convert:
+    dependency: transitive
+    description:
+      name: convert
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1"
+  crypto:
+    dependency: transitive
+    description:
+      name: crypto
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1+1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -124,11 +138,9 @@ packages:
   swagger:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: e54adb912edf05995e68ccf68c0840347d4c0821
-      url: "https://github.com/nickmeinhold/ptv_api_client.git"
-    source: git
+      path: "/Users/nick/git/open_source/ptv_api_client"
+      relative: false
+    source: path
     version: "1.0.0"
   term_glyph:
     dependency: transitive
