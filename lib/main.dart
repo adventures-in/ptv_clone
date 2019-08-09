@@ -32,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     final ApiService service = ApiService();
-    service.getDisruptions();
+    service.getDisruptions().then(print);
   }
 
   void _incrementCounter() {
