@@ -9,9 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  swagger:
-    # git: https://github.com/nickmeinhold/ptv_api_client.git
-    path: /Users/nick/git/open_source/ptv_api_client
+  ptv_api_client:
+    git: https://github.com/nickmeinhold/ptv_api_client.git
 
 dev_dependencies:
   flutter_test:

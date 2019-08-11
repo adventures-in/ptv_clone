@@ -95,6 +95,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  ptv_api_client:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: d36eb460b0a91df229494ca7ac2063a08de1fb2b
+      url: "https://github.com/nickmeinhold/ptv_api_client.git"
+    source: git
+    version: "0.0.1"
   quiver:
     dependency: transitive
     description:
@@ -135,13 +144,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
-  swagger:
-    dependency: "direct main"
-    description:
-      path: "/Users/nick/git/open_source/ptv_api_client"
-      relative: false
-    source: path
-    version: "1.0.0"
   term_glyph:
     dependency: transitive
     description:
