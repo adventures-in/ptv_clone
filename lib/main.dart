@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     defaultApiClient.setCredentials(credentials['key'], credentials['uid']);
     final ApiService service = ApiService();
-    service.getDisruptions().then(print);
+    service.getStops().then(print);
   }
 
   @override
