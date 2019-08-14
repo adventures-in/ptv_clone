@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   ptv_api_client:
     git: https://github.com/nickmeinhold/ptv_api_client.git
+  flutter_redux: any
 
 dev_dependencies:
   flutter_test:
@@ -18,3 +19,4 @@ dev_dependencies:
   pedantic: ^1.0.0
 
 flutter:
+  uses-material-design: true
