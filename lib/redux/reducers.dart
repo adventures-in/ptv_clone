@@ -1,4 +1,5 @@
 import 'package:ptv_clone/models/app_state.dart';
+import 'package:ptv_clone/models/built_location.dart';
 import 'package:ptv_clone/models/problem.dart';
 import 'package:ptv_clone/redux/actions.dart';
 import 'package:redux/redux.dart';
@@ -21,5 +22,10 @@ AppState _addProblem(AppState state, ActionAddProblem action) {
   return state.copyWith(problems: newProblems);
 }
 
-AppState _storeLocation(AppState state, ActionStoreLocation action) =>
-    state.copyWith(location: action.location);
+AppState _storeLocation(AppState state, ActionStoreLocation action) {
+  return state.copyWith(
+      location: BuiltLocation((b) => b
+        ..latitude = action.latitude
+        ..longitude = action.longitude
+        ..timestamp = action.timestamp));
+}

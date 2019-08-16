@@ -1,4 +1,5 @@
 ## My added ignores 
+*.g.dart
 
 # API Credentials
 lib/utilities/credentials.dart

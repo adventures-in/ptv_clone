@@ -1,5 +1,4 @@
 import 'package:ptv_clone/models/app_state.dart';
-import 'package:ptv_clone/models/location.dart';
 import 'package:ptv_clone/redux/actions.dart';
 import 'package:ptv_clone/services/api_service.dart';
 import 'package:ptv_clone/services/device_service.dart';
@@ -20,8 +19,6 @@ void Function(Store<AppState> store, ActionRequestLocation action,
       NextDispatcher next) async {
     next(action);
 
-    final Location location = await deviceService.getLocation();
-
-    store.dispatch(ActionStoreLocation(location: location));
+    store.dispatch(await deviceService.requestLocationAction());
   };
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:ptv_clone/models/app_state.dart';
-import 'package:ptv_clone/models/location.dart';
+import 'package:ptv_clone/models/built_location.dart';
 import 'package:ptv_clone/redux/actions.dart';
 import 'package:ptv_clone/redux/middleware.dart';
 import 'package:ptv_clone/redux/reducers.dart';
@@ -58,7 +58,7 @@ class MyScaffold extends StatelessWidget {
           index: index,
           children: <Widget>[
             Center(
-                child: StoreConnector<AppState, Location>(
+                child: StoreConnector<AppState, BuiltLocation>(
               converter: (store) => store.state.location,
               builder: (context, location) {
                 return Text('Location: $location');
