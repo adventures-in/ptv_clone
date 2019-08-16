@@ -5,6 +5,7 @@ import 'package:redux/redux.dart';
 
 /// Reducer
 final Function appStateReducer = combineReducers<AppState>(<Reducer<AppState>>[
+  TypedReducer<AppState, ActionStoreLocation>(_storeLocation),
   TypedReducer<AppState, ActionSetHome>(_setHome),
   TypedReducer<AppState, ActionAddProblem>(_addProblem),
 ]);
@@ -19,3 +20,6 @@ AppState _addProblem(AppState state, ActionAddProblem action) {
 
   return state.copyWith(problems: newProblems);
 }
+
+AppState _storeLocation(AppState state, ActionStoreLocation action) =>
+    state.copyWith(location: action.location);

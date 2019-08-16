@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:ptv_api_client/api.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:ptv_clone/models/app_state.dart';
+import 'package:ptv_clone/models/location.dart';
 import 'package:ptv_clone/redux/actions.dart';
+import 'package:ptv_clone/redux/middleware.dart';
 import 'package:ptv_clone/redux/reducers.dart';
 import 'package:ptv_clone/services/api_service.dart';
-import 'package:ptv_clone/utilities/credentials.dart';
+import 'package:ptv_clone/services/device_service.dart';
 import 'package:redux/redux.dart';
 
 void main() {
+  final ApiService apiService = ApiService();
+  final DeviceService deviceService = DeviceService(Geolocator());
+
   final Store store = Store<AppState>(
     appStateReducer,
+    middleware: createMiddlewares(apiService, deviceService),
     initialState: AppState.initialState(),
   );
 
@@ -24,6 +30,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    store.dispatch(const ActionRequestLocation());
+
     return StoreProvider<AppState>(
       store: store,
       child: MaterialApp(
@@ -31,35 +39,18 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blueGrey,
         ),
-        home: MyHomePage(title: 'PTV Clone'),
+        home: MyScaffold(),
       ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  void initState() {
-    super.initState();
-    defaultApiClient.setCredentials(credentials['key'], credentials['uid']);
-    final ApiService service = ApiService();
-    service.getStops().then(print);
-  }
-
+class MyScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('PTV Clone'),
       ),
       body: StoreConnector<AppState, int>(
         converter: (store) => store.state.homeIndex,
@@ -67,8 +58,12 @@ class _MyHomePageState extends State<MyHomePage> {
           index: index,
           children: <Widget>[
             Center(
-              child: Text('My Page!'),
-            ),
+                child: StoreConnector<AppState, Location>(
+              converter: (store) => store.state.location,
+              builder: (context, location) {
+                return Text('Location: $location');
+              },
+            )),
             Center(
               child: Text('My Other Page!'),
             ),
