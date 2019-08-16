@@ -1,4 +1,4 @@
-import 'package:ptv_clone/models/location.dart';
+import 'package:ptv_clone/models/built_location.dart';
 import 'package:ptv_clone/models/problem.dart';
 import 'package:quiver/core.dart';
 
@@ -12,12 +12,12 @@ class AppState {
 
   final int homeIndex;
   final List<Problem> problems;
-  final Location location;
+  final BuiltLocation location;
 
   static AppState initialState() => AppState(homeIndex: 0, problems: []);
 
   AppState copyWith(
-      {int homeIndex, List<Problem> problems, Location location}) {
+      {int homeIndex, List<Problem> problems, BuiltLocation location}) {
     return AppState(
       homeIndex: homeIndex ?? this.homeIndex,
       problems: problems ?? this.problems,

@@ -26,3 +26,54 @@ const Map<String, String> credentials = <String, String>{
 ```
 
 If you put `credentials.dart` in the `lib/utilities/` folder it is already in `.gitignore` so will not be added to version control.
+
+## Generated Code 
+
+Models use [built_value](https://pub.dev/packages/built_value).
+
+Run codegen with: 
+`flutter packages pub run build_runner build`
+
+### Snippet for boilerplate 
+
+Generating serializable built models with [built_value](https://pub.dev/packages/built_value) requires a fair bit of boilerplate in order to connect the model to its generated code. 
+
+We can automate writing the boilerplate using code snippets.  For example in VSCode, the following snippet will use the file name to create all the boilerplate for a model.  
+```Json
+{
+  "built_value class": {
+	  "prefix": "blt_val",
+	    "body": [
+          "library ${TM_FILENAME_BASE};",
+          "",
+          "import 'dart:convert';",
+          "",
+          "import 'package:built_collection/built_collection.dart';",
+          "import 'package:built_value/built_value.dart';",
+          "import 'package:built_value/serializer.dart';",
+          "",
+          "part '${TM_FILENAME_BASE}.g.dart';",
+          "",
+          "abstract class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g} implements Built<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}, ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}Builder> {",
+          "  ${1}",
+          "",
+          "\t${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}._();",
+          "",
+          "\tfactory ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}([updates(${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}Builder b)]) = _$${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g};",
+          "",
+          "\tString toJson() {",
+          "\t\treturn json.encode(serializers.serializeWith(${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}.serializer, this));",
+          "\t}",
+          "",
+          "",
+          "\tstatic ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g} fromJson(String jsonString) {",
+          "\t\treturn serializers.deserializeWith(${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}.serializer, json.decode(jsonString));",
+          "\t}",
+          "",
+          "\tstatic Serializer<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}> get serializer => _$${TM_FILENAME_BASE/([a-z]*)_+([a-z]*)/${1:/lower}${2:/capitalize}/g}Serializer;",
+          "}"
+	  ],
+	  "description": "dart built_value class"
+	},	
+}
+```
