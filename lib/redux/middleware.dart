@@ -7,18 +7,18 @@ import 'package:redux/redux.dart';
 List<Middleware<AppState>> createMiddlewares(
     ApiService apiService, DeviceService deviceService) {
   return <Middleware<AppState>>[
-    TypedMiddleware<AppState, ActionRequestLocation>(
+    TypedMiddleware<AppState, ActionObserveLocation>(
       _getLocation(deviceService),
     ),
   ];
 }
 
-void Function(Store<AppState> store, ActionRequestLocation action,
+void Function(Store<AppState> store, ActionObserveLocation action,
     NextDispatcher next) _getLocation(DeviceService deviceService) {
-  return (Store<AppState> store, ActionRequestLocation action,
+  return (Store<AppState> store, ActionObserveLocation action,
       NextDispatcher next) async {
     next(action);
 
-    store.dispatch(await deviceService.requestLocationAction());
+    deviceService.locationStream.listen((action) => store.dispatch(action));
   };
 }

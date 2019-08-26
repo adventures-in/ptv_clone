@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:ptv_clone/redux/actions.dart';
 
@@ -16,5 +18,14 @@ class DeviceService {
         latitude: position.latitude,
         longitude: position.longitude,
         timestamp: position.timestamp);
+  }
+
+  Stream<ActionStoreLocation> get locationStream {
+    return _geolocator.getPositionStream().map(
+          (position) => ActionStoreLocation(
+              latitude: position.latitude,
+              longitude: position.longitude,
+              timestamp: position.timestamp),
+        );
   }
 }

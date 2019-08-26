@@ -11,8 +11,8 @@ class ActionAddProblem {
   final Problem problem;
 }
 
-class ActionRequestLocation {
-  const ActionRequestLocation();
+class ActionObserveLocation {
+  const ActionObserveLocation();
 }
 
 class ActionStoreLocation {

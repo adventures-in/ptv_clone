@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    store.dispatch(const ActionRequestLocation());
+    store.dispatch(const ActionObserveLocation());
 
     return StoreProvider<AppState>(
       store: store,
