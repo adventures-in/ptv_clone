@@ -27,6 +27,15 @@ const Map<String, String> credentials = <String, String>{
 
 If you put `credentials.dart` in the `lib/utilities/` folder it is already in `.gitignore` so will not be added to version control.
 
+## Debugging with RemoteDevTools 
+
+see https://github.com/MichaelMarner/dart-redux-remote-devtools
+
+Get the local ip from Network Preferences and update main_rdt.dart
+`remotedev --port 8000`
+Run Debug Mobile configuration from launch.json 
+open `http://localhost:8000`
+
 ## Generated Code 
 
 Models use [built_value](https://pub.dev/packages/built_value).

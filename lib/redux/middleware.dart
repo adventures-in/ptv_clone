@@ -19,6 +19,6 @@ void Function(Store<AppState> store, ActionObserveLocation action,
       NextDispatcher next) async {
     next(action);
 
-    deviceService.locationStream.listen((action) => store.dispatch(action));
+    deviceService.locationStream.listen(store.dispatch);
   };
 }

@@ -6,17 +6,27 @@ import 'package:ptv_clone/redux/reducers.dart';
 import 'package:ptv_clone/services/api_service.dart';
 import 'package:ptv_clone/services/device_service.dart';
 import 'package:ptv_clone/widgets/app.dart';
-import 'package:redux/redux.dart';
+import 'package:redux_dev_tools/redux_dev_tools.dart';
+import 'package:redux_remote_devtools/redux_remote_devtools.dart';
 
-void main() {
+void main() async {
+  final RemoteDevToolsMiddleware remoteDevtools =
+      RemoteDevToolsMiddleware('192.168.0.18:8000');
+  await remoteDevtools.connect();
+
   final ApiService apiService = ApiService();
   final DeviceService deviceService = DeviceService(Geolocator());
 
-  final Store store = Store<AppState>(
+  final DevToolsStore store = DevToolsStore<AppState>(
     appStateReducer,
-    middleware: createMiddlewares(apiService, deviceService),
+    middleware: [
+      remoteDevtools,
+      ...createMiddlewares(apiService, deviceService)
+    ],
     initialState: AppState.initialState(),
   );
+
+  remoteDevtools.store = store;
 
   runApp(MyApp(store));
 }
