@@ -1,6 +1,5 @@
 import 'package:ptv_api_client/api.dart';
 
-import 'package:geolocator/geolocator.dart';
 import 'package:ptv_clone/utilities/credentials.dart';
 
 class ApiService {
@@ -8,12 +7,13 @@ class ApiService {
     defaultApiClient.setCredentials(credentials['key'], credentials['uid']);
   }
 
-  Future<V3StopsByDistanceResponse> getStops(Position position) async {
+  Future<V3StopsByDistanceResponse> getNearbyStops(
+      double latitude, double longitude) async {
     final api_instance = StopsApi();
 
     try {
-      final V3StopsByDistanceResponse result = await api_instance
-          .stopsStopsByGeolocation(position.latitude, position.longitude);
+      final V3StopsByDistanceResponse result =
+          await api_instance.stopsStopsByGeolocation(latitude, longitude);
       return result;
     } catch (e) {
       print(

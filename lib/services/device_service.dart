@@ -10,7 +10,7 @@ class DeviceService {
 
   /// get the current location using the geolocator package
   /// convert a [Geolocator.Position] to a [Location]
-  Future<ActionStoreLocation> requestLocationAction() async {
+  Future<Action> requestLocationAction() async {
     Position position = await _geolocator.getLastKnownPosition(
         desiredAccuracy: LocationAccuracy.high);
 
@@ -20,7 +20,7 @@ class DeviceService {
         timestamp: position.timestamp);
   }
 
-  Stream<ActionStoreLocation> get locationStream {
+  Stream<Action> get locationStream {
     return _geolocator.getPositionStream().map(
           (position) => ActionStoreLocation(
               latitude: position.latitude,

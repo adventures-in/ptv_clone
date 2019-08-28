@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:ptv_clone/models/app_state.dart';
+import 'package:ptv_clone/models/built_app_state.dart';
 import 'package:ptv_clone/models/built_location.dart';
 import 'package:ptv_clone/redux/actions.dart';
 import 'package:redux/redux.dart';
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     store.dispatch(const ActionObserveLocation());
 
-    return StoreProvider<AppState>(
+    return StoreProvider<BuiltAppState>(
       store: store,
       child: MaterialApp(
         title: 'PTV Clone',
@@ -34,13 +34,13 @@ class MyScaffold extends StatelessWidget {
       appBar: AppBar(
         title: Text('PTV Clone'),
       ),
-      body: StoreConnector<AppState, int>(
+      body: StoreConnector<BuiltAppState, int>(
         converter: (store) => store.state.homeIndex,
         builder: (context, index) => IndexedStack(
           index: index,
           children: <Widget>[
             Center(
-                child: StoreConnector<AppState, BuiltLocation>(
+                child: StoreConnector<BuiltAppState, BuiltLocation>(
               converter: (store) => store.state.location,
               builder: (context, location) {
                 return Text('Location: $location');
@@ -66,7 +66,7 @@ class MyScaffold extends StatelessWidget {
               title: Text('Item 1'),
               onTap: () {
                 Navigator.pop(context);
-                StoreProvider.of<AppState>(context).dispatch(
+                StoreProvider.of<BuiltAppState>(context).dispatch(
                   ActionSetHome(index: 0),
                 );
               },
@@ -75,7 +75,7 @@ class MyScaffold extends StatelessWidget {
               title: Text('Item 2'),
               onTap: () {
                 Navigator.pop(context);
-                StoreProvider.of<AppState>(context).dispatch(
+                StoreProvider.of<BuiltAppState>(context).dispatch(
                   ActionSetHome(index: 1),
                 );
               },
