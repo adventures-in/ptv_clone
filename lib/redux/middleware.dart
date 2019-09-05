@@ -37,9 +37,9 @@ void Function(
       NextDispatcher next) async {
     next(action);
 
-    var response = await apiService.getStopsByLocation(
+    var nearbyStopsResponse = await apiService.getStopsByLocation(
         action.location.latitude, action.location.longitude);
 
-    store.dispatch(ActionStoreNearbyStops(response: response));
+    store.dispatch(ActionStoreNearbyStops(nearbyStops: nearbyStopsResponse));
   };
 }

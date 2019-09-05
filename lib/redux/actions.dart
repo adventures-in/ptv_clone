@@ -5,16 +5,13 @@ import 'package:ptv_clone/models/problem.dart';
 
 class Action {
   const Action(this.propsMap);
-
   Action.fromJson(Map<String, dynamic> json) : propsMap = json;
-
   final Map<String, dynamic> propsMap;
-
   Map<String, dynamic> toJson() => propsMap;
 }
 
-class ActionSetHome extends Action {
-  ActionSetHome({@required this.index}) : super({'index': index});
+class ActionStoreHome extends Action {
+  ActionStoreHome({@required this.index}) : super({'index': index});
   final int index;
 }
 
@@ -34,7 +31,7 @@ class ActionStoreLocation extends Action {
 }
 
 class ActionStoreNearbyStops extends Action {
-  ActionStoreNearbyStops({@required this.response})
-      : super({'response': response});
-  final V3StopsByDistanceResponse response;
+  ActionStoreNearbyStops({@required this.nearbyStops})
+      : super({'nearbyStops': nearbyStops});
+  final V3StopsByDistanceResponse nearbyStops;
 }

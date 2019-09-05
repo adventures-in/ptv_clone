@@ -5,13 +5,13 @@ import 'package:redux/redux.dart';
 /// Reducer
 final Function appStateReducer = combineReducers<AppState>(<Reducer<AppState>>[
   TypedReducer<AppState, ActionStoreLocation>(_storeLocation),
-  TypedReducer<AppState, ActionSetHome>(_setHome),
+  TypedReducer<AppState, ActionStoreHome>(_storeHome),
   TypedReducer<AppState, ActionAddProblem>(_addProblem),
-  TypedReducer<AppState, ActionStoreNearbyStops>(_storeNearbyStops),
+  TypedReducer<AppState, ActionStoreNearbyStops>(_storeNearbyStopsWithTypes),
 ]);
 
 //
-AppState _setHome(AppState state, ActionSetHome action) =>
+AppState _storeHome(AppState state, ActionStoreHome action) =>
     state.rebuild((b) => b..homeIndex = action.index);
 
 AppState _addProblem(AppState state, ActionAddProblem action) =>
@@ -23,5 +23,7 @@ AppState _storeLocation(AppState state, ActionStoreLocation action) =>
       ..location.longitude = action.location.longitude
       ..location.timestamp = action.location.timestamp);
 
-AppState _storeNearbyStops(AppState state, ActionStoreNearbyStops action) =>
-    state.rebuild((b) => b..stopsByDistance = action.response.toBuilder());
+AppState _storeNearbyStopsWithTypes(
+        AppState state, ActionStoreNearbyStops action) =>
+    state.rebuild(
+        (b) => b..nearbyStopsResponse = action.nearbyStops.toBuilder());

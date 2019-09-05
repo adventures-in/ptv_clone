@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:ptv_api_client/api.dart';
 import 'package:ptv_clone/models/app_state.dart';
-import 'package:ptv_clone/models/location.dart';
 import 'package:ptv_clone/redux/actions.dart';
 import 'package:redux/redux.dart';
 
@@ -62,7 +61,7 @@ class MyScaffold extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
                 StoreProvider.of<AppState>(context).dispatch(
-                  ActionSetHome(index: 0),
+                  ActionStoreHome(index: 0),
                 );
               },
             ),
@@ -71,7 +70,7 @@ class MyScaffold extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
                 StoreProvider.of<AppState>(context).dispatch(
-                  ActionSetHome(index: 1),
+                  ActionStoreHome(index: 1),
                 );
               },
             ),
@@ -91,15 +90,49 @@ class NearbyStops extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: StoreConnector<AppState, V3StopsByDistanceResponse>(
-      converter: (store) => store.state.stopsByDistance,
+      converter: (store) => store.state.nearbyStopsResponse,
       builder: (context, stopsResponse) {
         return ListView.builder(
-          itemCount: stopsResponse.stops.length,
-          itemBuilder: (context, index) => ListTile(
-            leading: Text(stopsResponse.stops[index].stopName),
-          ),
-        );
+            itemCount: stopsResponse.stops.length,
+            itemBuilder: (context, index) {
+              var stop = stopsResponse.stops[index];
+              return ListTile(
+                leading: RouteIcon(stop.routeType),
+                title: Text(stop.stopName),
+                subtitle:
+                    Text('${routeNames[stop.routeType]} in ${stop.stopSuburb}'),
+              );
+            });
       },
     ));
   }
 }
+
+class RouteIcon extends StatelessWidget {
+  const RouteIcon(
+    this.routeType, {
+    Key key,
+  }) : super(key: key);
+
+  final int routeType;
+  final Map<int, Icon> map = const {
+    0: Icon(Icons.train, color: Colors.red),
+    1: Icon(Icons.tram, color: Colors.green),
+    2: Icon(Icons.directions_bus, color: Colors.blue)
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return map[routeType];
+  }
+}
+
+// this is avaiable in an API call but I can't see it changing
+// hardcoding it in for now as this seems like the pragmatic solution
+final Map<int, String> routeNames = const {
+  0: 'Train',
+  1: 'Tram',
+  2: 'Bus',
+  3: 'Vline',
+  4: 'Night Bus'
+};

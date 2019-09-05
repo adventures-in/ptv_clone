@@ -22,7 +22,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   int get homeIndex;
   BuiltList<Problem> get problems;
   Location get location;
-  V3StopsByDistanceResponse get stopsByDistance;
+  V3StopsByDistanceResponse get nearbyStopsResponse;
 
   static AppState initialState() => AppState((b) => b
     ..homeIndex = 0
@@ -30,10 +30,10 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
     ..location.latitude = 0
     ..location.longitude = 0
     ..location.timestamp = DateTime.now().toUtc()
-    ..stopsByDistance.status.health = 0
-    ..stopsByDistance.status.version = ''
-    ..stopsByDistance.disruptions = MapBuilder<String, V3Disruption>()
-    ..stopsByDistance.stops = ListBuilder<V3StopGeosearch>());
+    ..nearbyStopsResponse.status.health = 0
+    ..nearbyStopsResponse.status.version = ''
+    ..nearbyStopsResponse.disruptions = MapBuilder<String, V3Disruption>()
+    ..nearbyStopsResponse.stops = ListBuilder<V3StopGeosearch>());
 
   AppState._();
 
@@ -41,10 +41,6 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 
   Map<String, Object> toJson() =>
       serializers.serializeWith(AppState.serializer, this);
-
-  // String toJson() {
-  //   return json.encode(serializers.serializeWith(AppState.serializer, this));
-  // }
 
   static AppState fromJson(String jsonString) {
     return serializers.deserializeWith(

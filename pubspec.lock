@@ -365,8 +365,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: d36eb460b0a91df229494ca7ac2063a08de1fb2b
+      ref: built_value
+      resolved-ref: "52853374e39d6717f937cf7c0993556167bfbf10"
       url: "https://github.com/nickmeinhold/ptv_api_client.git"
     source: git
     version: "0.0.1"

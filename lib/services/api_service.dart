@@ -7,13 +7,13 @@ class ApiService {
     defaultApiClient.setCredentials(credentials['key'], credentials['uid']);
   }
 
+  final stopsApi = StopsApi();
+
   Future<V3StopsByDistanceResponse> getStopsByLocation(
       double latitude, double longitude) async {
-    final api_instance = StopsApi();
-
     try {
       final V3StopsByDistanceResponse result =
-          await api_instance.stopsStopsByGeolocation(latitude, longitude);
+          await stopsApi.stopsStopsByGeolocation(latitude, longitude);
       return result;
     } catch (e) {
       print(
