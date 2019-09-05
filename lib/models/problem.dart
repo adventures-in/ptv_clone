@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:ptv_clone/models/built_app_state.dart';
+import 'package:ptv_clone/models/app_state.dart';
 
 /// An error or self reported problem, for adding to the [Redux.store]
 ///
@@ -17,7 +17,7 @@ class Problem {
   final ProblemType type;
   final String message;
   final StackTrace trace;
-  final BuiltAppState state;
+  final AppState state;
   final Map<String, dynamic> info;
 
   @override

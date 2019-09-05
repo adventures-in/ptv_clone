@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:ptv_clone/models/built_app_state.dart';
-import 'package:ptv_clone/models/built_location.dart';
+import 'package:ptv_api_client/api.dart';
+import 'package:ptv_clone/models/app_state.dart';
+import 'package:ptv_clone/models/location.dart';
 import 'package:ptv_clone/redux/actions.dart';
 import 'package:redux/redux.dart';
 
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     store.dispatch(const ActionObserveLocation());
 
-    return StoreProvider<BuiltAppState>(
+    return StoreProvider<AppState>(
       store: store,
       child: MaterialApp(
         title: 'PTV Clone',
@@ -34,18 +35,12 @@ class MyScaffold extends StatelessWidget {
       appBar: AppBar(
         title: Text('PTV Clone'),
       ),
-      body: StoreConnector<BuiltAppState, int>(
+      body: StoreConnector<AppState, int>(
         converter: (store) => store.state.homeIndex,
         builder: (context, index) => IndexedStack(
           index: index,
           children: <Widget>[
-            Center(
-                child: StoreConnector<BuiltAppState, BuiltLocation>(
-              converter: (store) => store.state.location,
-              builder: (context, location) {
-                return Text('Location: $location');
-              },
-            )),
+            NearbyStops(),
             Center(
               child: Text('My Other Page!'),
             ),
@@ -66,7 +61,7 @@ class MyScaffold extends StatelessWidget {
               title: Text('Item 1'),
               onTap: () {
                 Navigator.pop(context);
-                StoreProvider.of<BuiltAppState>(context).dispatch(
+                StoreProvider.of<AppState>(context).dispatch(
                   ActionSetHome(index: 0),
                 );
               },
@@ -75,7 +70,7 @@ class MyScaffold extends StatelessWidget {
               title: Text('Item 2'),
               onTap: () {
                 Navigator.pop(context);
-                StoreProvider.of<BuiltAppState>(context).dispatch(
+                StoreProvider.of<AppState>(context).dispatch(
                   ActionSetHome(index: 1),
                 );
               },
@@ -84,5 +79,27 @@ class MyScaffold extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class NearbyStops extends StatelessWidget {
+  const NearbyStops({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: StoreConnector<AppState, V3StopsByDistanceResponse>(
+      converter: (store) => store.state.stopsByDistance,
+      builder: (context, stopsResponse) {
+        return ListView.builder(
+          itemCount: stopsResponse.stops.length,
+          itemBuilder: (context, index) => ListTile(
+            leading: Text(stopsResponse.stops[index].stopName),
+          ),
+        );
+      },
+    ));
   }
 }

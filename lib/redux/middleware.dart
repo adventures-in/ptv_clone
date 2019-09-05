@@ -1,38 +1,45 @@
-import 'package:ptv_clone/models/built_app_state.dart';
+import 'package:ptv_clone/models/app_state.dart';
 import 'package:ptv_clone/redux/actions.dart';
 import 'package:ptv_clone/services/api_service.dart';
 import 'package:ptv_clone/services/device_service.dart';
 import 'package:redux/redux.dart';
 
-List<Middleware<BuiltAppState>> createMiddlewares(
+List<Middleware<AppState>> createMiddlewares(
     ApiService apiService, DeviceService deviceService) {
-  return <Middleware<BuiltAppState>>[
-    TypedMiddleware<BuiltAppState, ActionObserveLocation>(
+  return <Middleware<AppState>>[
+    TypedMiddleware<AppState, ActionObserveLocation>(
       _getLocation(deviceService),
+    ),
+    TypedMiddleware<AppState, ActionStoreLocation>(
+      _getStopsByLocation(apiService),
     ),
   ];
 }
 
-void Function(Store<BuiltAppState> store, ActionObserveLocation action,
+void Function(Store<AppState> store, ActionObserveLocation action,
     NextDispatcher next) _getLocation(DeviceService deviceService) {
-  return (Store<BuiltAppState> store, ActionObserveLocation action,
-      NextDispatcher next) {
+  return (Store<AppState> store, ActionObserveLocation action,
+      NextDispatcher next) async {
     next(action);
 
-    deviceService.locationStream.listen(store.dispatch);
+    // deviceService.locationStream.listen(store.dispatch);
+
+    Action locationAction = await deviceService.requestLocationAction();
+
+    store.dispatch(locationAction);
   };
 }
 
-// void Function(Store<BuiltAppState> store, ActionStoreLocation action,
-//     NextDispatcher next) _getNearbyStops(ApiService apiService) {
-//   return (Store<BuiltAppState> store, ActionStoreLocation action,
-//       NextDispatcher next) async {
-//     next(action);
+void Function(
+        Store<AppState> store, ActionStoreLocation action, NextDispatcher next)
+    _getStopsByLocation(ApiService apiService) {
+  return (Store<AppState> store, ActionStoreLocation action,
+      NextDispatcher next) async {
+    next(action);
 
-//     var listFromApi = await apiService.getNearbyStops(action.latitude, action.longitude);
+    var response = await apiService.getStopsByLocation(
+        action.location.latitude, action.location.longitude);
 
-//     BuiltList<BuiltStopLocation> stops = BuiltList<BuiltStopLocation>()
-
-//     // store.dispatch(ActionSetNearbyStops());
-//   };
-// }
+    store.dispatch(ActionStoreNearbyStops(response: response));
+  };
+}

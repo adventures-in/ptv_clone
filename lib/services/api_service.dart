@@ -7,7 +7,7 @@ class ApiService {
     defaultApiClient.setCredentials(credentials['key'], credentials['uid']);
   }
 
-  Future<V3StopsByDistanceResponse> getNearbyStops(
+  Future<V3StopsByDistanceResponse> getStopsByLocation(
       double latitude, double longitude) async {
     final api_instance = StopsApi();
 

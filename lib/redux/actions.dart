@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:ptv_api_client/model/v3_stops_by_distance_response.dart';
+import 'package:ptv_clone/models/location.dart';
 import 'package:ptv_clone/models/problem.dart';
 
 class Action {
@@ -26,21 +28,13 @@ class ActionObserveLocation extends Action {
 }
 
 class ActionStoreLocation extends Action {
-  ActionStoreLocation(
-      {@required this.latitude,
-      @required this.longitude,
-      @required this.timestamp})
-      : super({
-          'latitude': latitude,
-          'longitude': longitude,
-          'timestamp': timestamp
-        });
-  final double latitude;
-  final double longitude;
-  final DateTime timestamp;
+  ActionStoreLocation({@required this.location})
+      : super({'latitude': location});
+  final Location location;
 }
 
-// class ActionSetNearbyStops extends Action {
-//   ActionSetNearbyStops()
-//   final
-// }
+class ActionStoreNearbyStops extends Action {
+  ActionStoreNearbyStops({@required this.response})
+      : super({'response': response});
+  final V3StopsByDistanceResponse response;
+}
