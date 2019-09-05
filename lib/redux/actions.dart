@@ -35,3 +35,8 @@ class ActionStoreNearbyStops extends Action {
       : super({'nearbyStops': nearbyStops});
   final V3StopsByDistanceResponse nearbyStops;
 }
+
+class ActionGetRoutesForId extends Action {
+  ActionGetRoutesForId({@required this.id}) : super({'id': id});
+  final int id;
+}

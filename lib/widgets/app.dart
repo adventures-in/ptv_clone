@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:ptv_api_client/api.dart';
 import 'package:ptv_clone/models/app_state.dart';
 import 'package:ptv_clone/redux/actions.dart';
@@ -96,11 +97,20 @@ class NearbyStops extends StatelessWidget {
             itemCount: stopsResponse.stops.length,
             itemBuilder: (context, index) {
               var stop = stopsResponse.stops[index];
-              return ListTile(
-                leading: RouteIcon(stop.routeType),
-                title: Text(stop.stopName),
-                subtitle:
-                    Text('${routeNames[stop.routeType]} in ${stop.stopSuburb}'),
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                duration: const Duration(milliseconds: 375),
+                child: SlideAnimation(
+                  verticalOffset: 50.0,
+                  child: FadeInAnimation(
+                    child: ListTile(
+                      leading: RouteIcon(stop.routeType),
+                      title: Text(stop.stopName),
+                      subtitle: Text(
+                          '${routeNames[stop.routeType]} in ${stop.stopSuburb}'),
+                    ),
+                  ),
+                ),
               );
             });
       },

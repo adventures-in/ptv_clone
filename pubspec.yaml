@@ -18,6 +18,7 @@ dependencies:
   redux_remote_devtools: any
   built_collection: '>=2.0.0 <5.0.0'
   built_value: '>=5.5.5 <7.0.0'
+  flutter_staggered_animations: "^0.1.1"
 
 dev_dependencies:
   flutter_test:
