@@ -13,6 +13,15 @@ List<Middleware<AppState>> createMiddlewares(
     TypedMiddleware<AppState, ActionStoreLocation>(
       _getStopsByLocation(apiService),
     ),
+    TypedMiddleware<AppState, ActionGetStopDetails>(
+      _getStopDetails(apiService),
+    ),
+    TypedMiddleware<AppState, ActionGetRoutes>(
+      _getRoutes(apiService),
+    ),
+    TypedMiddleware<AppState, ActionGetDepartures>(
+      _getDepartures(apiService),
+    ),
   ];
 }
 
@@ -41,5 +50,46 @@ void Function(
         action.location.latitude, action.location.longitude);
 
     store.dispatch(ActionStoreNearbyStops(nearbyStops: nearbyStopsResponse));
+  };
+}
+
+void Function(
+        Store<AppState> store, ActionGetStopDetails action, NextDispatcher next)
+    _getStopDetails(ApiService apiService) {
+  return (Store<AppState> store, ActionGetStopDetails action,
+      NextDispatcher next) async {
+    next(action);
+
+    var stopDetailsResponse = await apiService.getStopDetails(
+        stopId: action.stopId, routeType: action.routeType);
+
+    store.dispatch(ActionStoreStopDetails(response: stopDetailsResponse));
+  };
+}
+
+void Function(
+        Store<AppState> store, ActionGetRoutes action, NextDispatcher next)
+    _getRoutes(ApiService apiService) {
+  return (Store<AppState> store, ActionGetRoutes action,
+      NextDispatcher next) async {
+    next(action);
+
+    var routesResponse = await apiService.getRoutes(routeId: action.routeId);
+
+    store.dispatch(ActionStoreRoutes(response: routesResponse));
+  };
+}
+
+void Function(
+        Store<AppState> store, ActionGetDepartures action, NextDispatcher next)
+    _getDepartures(ApiService apiService) {
+  return (Store<AppState> store, ActionGetDepartures action,
+      NextDispatcher next) async {
+    next(action);
+
+    var departuresResponse = await apiService.getDepartures(
+        stopId: action.stopId, routeType: action.routeType);
+
+    store.dispatch(ActionStoreDepartures(response: departuresResponse));
   };
 }

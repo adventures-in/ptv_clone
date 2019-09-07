@@ -1,4 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:ptv_api_client/model/v3_departures_response.dart';
+import 'package:ptv_api_client/model/v3_route_response.dart';
+import 'package:ptv_api_client/model/v3_stop_response.dart';
 import 'package:ptv_api_client/model/v3_stops_by_distance_response.dart';
 import 'package:ptv_clone/models/location.dart';
 import 'package:ptv_clone/models/problem.dart';
@@ -8,6 +11,12 @@ class Action {
   Action.fromJson(Map<String, dynamic> json) : propsMap = json;
   final Map<String, dynamic> propsMap;
   Map<String, dynamic> toJson() => propsMap;
+}
+
+class ActionStoreNamedRoute extends Action {
+  ActionStoreNamedRoute({@required this.routeName})
+      : super({'routeName': routeName});
+  final String routeName;
 }
 
 class ActionStoreHome extends Action {
@@ -36,7 +45,38 @@ class ActionStoreNearbyStops extends Action {
   final V3StopsByDistanceResponse nearbyStops;
 }
 
-class ActionGetRoutesForId extends Action {
-  ActionGetRoutesForId({@required this.id}) : super({'id': id});
-  final int id;
+class ActionGetRoutes extends Action {
+  ActionGetRoutes({@required this.routeId}) : super({'routeId': routeId});
+  final int routeId;
+}
+
+class ActionStoreRoutes extends Action {
+  ActionStoreRoutes({@required this.response}) : super({'response': response});
+  final V3RouteResponse response;
+}
+
+class ActionGetStopDetails extends Action {
+  ActionGetStopDetails({@required this.stopId, @required this.routeType})
+      : super({'stopId': stopId, 'routeType': routeType});
+  final int stopId;
+  final int routeType;
+}
+
+class ActionStoreStopDetails extends Action {
+  ActionStoreStopDetails({@required this.response})
+      : super({'response': response});
+  final V3StopResponse response;
+}
+
+class ActionGetDepartures extends Action {
+  ActionGetDepartures({@required this.stopId, @required this.routeType})
+      : super({'stopId': stopId, 'routeType': routeType});
+  final int stopId;
+  final int routeType;
+}
+
+class ActionStoreDepartures extends Action {
+  ActionStoreDepartures({@required this.response})
+      : super({'response': response});
+  final V3DeparturesResponse response;
 }

@@ -22,7 +22,11 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blueGrey,
         ),
-        home: MyScaffold(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => MyScaffold(),
+          '/stop_departures': (context) => StopDeparturesList(),
+        },
       ),
     );
   }
@@ -40,7 +44,7 @@ class MyScaffold extends StatelessWidget {
         builder: (context, index) => IndexedStack(
           index: index,
           children: <Widget>[
-            NearbyStops(),
+            NearbyStopsList(),
             Center(
               child: Text('My Other Page!'),
             ),
@@ -82,16 +86,15 @@ class MyScaffold extends StatelessWidget {
   }
 }
 
-class NearbyStops extends StatelessWidget {
-  const NearbyStops({
+class NearbyStopsList extends StatelessWidget {
+  const NearbyStopsList({
     Key key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: StoreConnector<AppState, V3StopsByDistanceResponse>(
-      converter: (store) => store.state.nearbyStopsResponse,
+    return StoreConnector<AppState, V3StopsByDistanceResponse>(
+      converter: (store) => store.state.nearbyStops,
       builder: (context, stopsResponse) {
         return ListView.builder(
             itemCount: stopsResponse.stops.length,
@@ -104,17 +107,27 @@ class NearbyStops extends StatelessWidget {
                   verticalOffset: 50.0,
                   child: FadeInAnimation(
                     child: ListTile(
-                      leading: RouteIcon(stop.routeType),
-                      title: Text(stop.stopName),
-                      subtitle: Text(
-                          '${routeNames[stop.routeType]} in ${stop.stopSuburb}'),
-                    ),
+                        leading: RouteIcon(stop.routeType),
+                        title: Text(stop.stopName),
+                        subtitle: Text(
+                            '${routeNames[stop.routeType]} in ${stop.stopSuburb}'),
+                        onTap: () {
+                          StoreProvider.of<AppState>(context).dispatch(
+                              ActionStoreNamedRoute(routeName: 'second'));
+                          StoreProvider.of<AppState>(context).dispatch(
+                              ActionGetDepartures(
+                                  stopId: stop.stopId,
+                                  routeType: stop.routeType));
+                          Navigator.pushNamed(
+                              context, StopDeparturesList.routeName,
+                              arguments: stop);
+                        }),
                   ),
                 ),
               );
             });
       },
-    ));
+    );
   }
 }
 
@@ -146,3 +159,52 @@ final Map<int, String> routeNames = const {
   3: 'Vline',
   4: 'Night Bus'
 };
+
+class StopDeparturesList extends StatelessWidget {
+  const StopDeparturesList({
+    Key key,
+  }) : super(key: key);
+
+  static const routeName = '/stop_departures';
+
+  @override
+  Widget build(BuildContext context) {
+    final V3StopGeosearch stop = ModalRoute.of(context).settings.arguments;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Second Route"),
+      ),
+      body: StoreConnector<AppState, V3DeparturesResponse>(
+        converter: (store) => store.state.departures,
+        builder: (context, departuresResponse) {
+          return ListView.builder(
+              itemCount: departuresResponse.departures.length,
+              itemBuilder: (context, index) {
+                final departure = departuresResponse.departures[index];
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  duration: const Duration(milliseconds: 375),
+                  child: SlideAnimation(
+                    verticalOffset: 50.0,
+                    child: FadeInAnimation(
+                      child: ListTile(
+                          leading: RouteIcon(stop.routeType),
+                          title: Text(
+                              'stop: ${departure.stopId}, direction: ${departure.directionId}'),
+                          subtitle: Text(
+                              'departs at ${departure.estimatedDepartureUtc}'),
+                          onTap: () {
+                            StoreProvider.of<AppState>(context).dispatch(
+                                ActionStoreNamedRoute(routeName: 'second'));
+                            Navigator.pushNamed(context, '/second',
+                                arguments: stop);
+                          }),
+                    ),
+                  ),
+                );
+              });
+        },
+      ),
+    );
+  }
+}

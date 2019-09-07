@@ -22,7 +22,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   int get homeIndex;
   BuiltList<Problem> get problems;
   Location get location;
-  V3StopsByDistanceResponse get nearbyStopsResponse;
+  V3StopsByDistanceResponse get nearbyStops;
+  // V3StopResponse get stopDetails;
+  V3DeparturesResponse get departures;
 
   static AppState initialState() => AppState((b) => b
     ..homeIndex = 0
@@ -30,10 +32,18 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
     ..location.latitude = 0
     ..location.longitude = 0
     ..location.timestamp = DateTime.now().toUtc()
-    ..nearbyStopsResponse.status.health = 0
-    ..nearbyStopsResponse.status.version = ''
-    ..nearbyStopsResponse.disruptions = MapBuilder<String, V3Disruption>()
-    ..nearbyStopsResponse.stops = ListBuilder<V3StopGeosearch>());
+    ..nearbyStops.disruptions = MapBuilder<String, V3Disruption>()
+    ..nearbyStops.status.health = 0
+    ..nearbyStops.status.version = ''
+    ..nearbyStops.stops = ListBuilder<V3StopGeosearch>()
+    ..departures.departures = ListBuilder<V3Departure>()
+    ..departures.directions = MapBuilder<String, V3Direction>()
+    ..departures.disruptions = MapBuilder<String, V3Disruption>()
+    ..departures.routes = MapBuilder<String, V3Route>()
+    ..departures.runs = MapBuilder<String, V3Run>()
+    ..departures.status.health = 0
+    ..departures.status.version = ''
+    ..departures.stops = MapBuilder<String, V3ResultStop>());
 
   AppState._();
 

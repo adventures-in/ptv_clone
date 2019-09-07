@@ -4,17 +4,27 @@ import 'package:ptv_api_client/api.dart';
 import 'package:ptv_clone/utilities/credentials.dart';
 
 class ApiService {
-  ApiService(this.stopsApi, this.routesApi) {
+  ApiService(this.departuresApi, this.stopsApi, this.runsApi, this.routesApi) {
     defaultApiClient.setCredentials(credentials['key'], credentials['uid']);
   }
 
-  final stopsApi;
-  final routesApi;
+  final DeparturesApi departuresApi;
+  final StopsApi stopsApi;
+  final RunsApi runsApi;
+  final RoutesApi routesApi;
 
   Future<V3StopsByDistanceResponse> getStopsByLocation(
           double latitude, double longitude) =>
-      stopsApi.stopsStopsByGeolocation(latitude, longitude);
+      stopsApi.stopsStopsByGeolocation(-37.747650146484375, 145.07156175571774);
 
-  Future<V3RouteResponse> getRoutesFor({@required int id}) =>
-      routesApi.routesRouteFromId(id);
+  Future<V3StopResponse> getStopDetails(
+          {@required int stopId, @required int routeType}) =>
+      stopsApi.stopsStopDetails(stopId, routeType);
+
+  Future<V3RouteResponse> getRoutes({@required int routeId}) =>
+      routesApi.routesRouteFromId(routeId);
+
+  Future<V3DeparturesResponse> getDepartures(
+          {@required int routeType, @required int stopId}) =>
+      departuresApi.departuresGetForStop(routeType, stopId);
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:ptv_api_client/api.dart';
 import 'package:ptv_api_client/api/routes_api.dart';
 import 'package:ptv_api_client/api/stops_api.dart';
 import 'package:ptv_clone/models/app_state.dart';
@@ -16,9 +17,12 @@ void main() async {
       RemoteDevToolsMiddleware('192.168.0.18:8000');
   await remoteDevtools.connect();
 
+  final departuresApi = DeparturesApi();
   final stopsApi = StopsApi();
   final routesApi = RoutesApi();
-  final ApiService apiService = ApiService(stopsApi, routesApi);
+  final runsApi = RunsApi();
+  final ApiService apiService =
+      ApiService(departuresApi, stopsApi, runsApi, routesApi);
   final DeviceService deviceService = DeviceService(Geolocator());
 
   final DevToolsStore store = DevToolsStore<AppState>(

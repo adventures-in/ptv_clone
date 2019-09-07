@@ -47,7 +47,7 @@ open `http://localhost:8000`
 Models use [built_value](https://pub.dev/packages/built_value).
 
 Run codegen with: 
-`flutter packages pub run build_runner build`
+`flutter pub run build_runner build`
 
 ### Snippet for boilerplate 
 

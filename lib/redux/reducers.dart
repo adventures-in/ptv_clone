@@ -8,6 +8,7 @@ final Function appStateReducer = combineReducers<AppState>(<Reducer<AppState>>[
   TypedReducer<AppState, ActionStoreHome>(_storeHome),
   TypedReducer<AppState, ActionAddProblem>(_addProblem),
   TypedReducer<AppState, ActionStoreNearbyStops>(_storeNearbyStopsWithTypes),
+  TypedReducer<AppState, ActionStoreDepartures>(_storeDepartures),
 ]);
 
 //
@@ -25,5 +26,7 @@ AppState _storeLocation(AppState state, ActionStoreLocation action) =>
 
 AppState _storeNearbyStopsWithTypes(
         AppState state, ActionStoreNearbyStops action) =>
-    state.rebuild(
-        (b) => b..nearbyStopsResponse = action.nearbyStops.toBuilder());
+    state.rebuild((b) => b..nearbyStops = action.nearbyStops.toBuilder());
+
+AppState _storeDepartures(AppState state, ActionStoreDepartures action) =>
+    state.rebuild((b) => b..departures = action.response.toBuilder());
