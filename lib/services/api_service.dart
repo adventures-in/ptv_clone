@@ -21,10 +21,9 @@ class ApiService {
           {@required int stopId, @required int routeType}) =>
       stopsApi.stopsStopDetails(stopId, routeType);
 
-  Future<V3RouteResponse> getRoutes({@required int routeId}) =>
-      routesApi.routesRouteFromId(routeId);
-
   Future<V3DeparturesResponse> getDepartures(
           {@required int routeType, @required int stopId}) =>
       departuresApi.departuresGetForStop(routeType, stopId);
+
+  Future<V3RoutesResponse> getRoutes() => routesApi.routesOneOrMoreRoutes();
 }

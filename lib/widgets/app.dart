@@ -4,6 +4,8 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:ptv_api_client/api.dart';
 import 'package:ptv_clone/models/app_state.dart';
 import 'package:ptv_clone/redux/actions.dart';
+import 'package:ptv_clone/widgets/shared.dart';
+import 'package:ptv_clone/widgets/stop_departures.dart';
 import 'package:redux/redux.dart';
 
 class MyApp extends StatelessWidget {
@@ -14,6 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     store.dispatch(const ActionObserveLocation());
+    store.dispatch(const ActionGetRoutes());
 
     return StoreProvider<AppState>(
       store: store,
@@ -127,84 +130,6 @@ class NearbyStopsList extends StatelessWidget {
               );
             });
       },
-    );
-  }
-}
-
-class RouteIcon extends StatelessWidget {
-  const RouteIcon(
-    this.routeType, {
-    Key key,
-  }) : super(key: key);
-
-  final int routeType;
-  final Map<int, Icon> map = const {
-    0: Icon(Icons.train, color: Colors.red),
-    1: Icon(Icons.tram, color: Colors.green),
-    2: Icon(Icons.directions_bus, color: Colors.blue)
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    return map[routeType];
-  }
-}
-
-// this is avaiable in an API call but I can't see it changing
-// hardcoding it in for now as this seems like the pragmatic solution
-final Map<int, String> routeNames = const {
-  0: 'Train',
-  1: 'Tram',
-  2: 'Bus',
-  3: 'Vline',
-  4: 'Night Bus'
-};
-
-class StopDeparturesList extends StatelessWidget {
-  const StopDeparturesList({
-    Key key,
-  }) : super(key: key);
-
-  static const routeName = '/stop_departures';
-
-  @override
-  Widget build(BuildContext context) {
-    final V3StopGeosearch stop = ModalRoute.of(context).settings.arguments;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Second Route"),
-      ),
-      body: StoreConnector<AppState, V3DeparturesResponse>(
-        converter: (store) => store.state.departures,
-        builder: (context, departuresResponse) {
-          return ListView.builder(
-              itemCount: departuresResponse.departures.length,
-              itemBuilder: (context, index) {
-                final departure = departuresResponse.departures[index];
-                return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: SlideAnimation(
-                    verticalOffset: 50.0,
-                    child: FadeInAnimation(
-                      child: ListTile(
-                          leading: RouteIcon(stop.routeType),
-                          title: Text(
-                              'stop: ${departure.stopId}, direction: ${departure.directionId}'),
-                          subtitle: Text(
-                              'departs at ${departure.estimatedDepartureUtc}'),
-                          onTap: () {
-                            StoreProvider.of<AppState>(context).dispatch(
-                                ActionStoreNamedRoute(routeName: 'second'));
-                            Navigator.pushNamed(context, '/second',
-                                arguments: stop);
-                          }),
-                    ),
-                  ),
-                );
-              });
-        },
-      ),
     );
   }
 }

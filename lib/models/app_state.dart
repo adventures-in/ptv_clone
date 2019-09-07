@@ -7,6 +7,7 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:ptv_api_client/api.dart';
 import 'package:ptv_api_client/model/v3_stops_by_distance_response.dart';
+import 'package:ptv_api_client/model/v3_routes_response.dart';
 import 'package:ptv_clone/models/location.dart';
 import 'package:ptv_clone/models/problem.dart';
 import 'package:ptv_clone/models/serializers.dart';
@@ -22,8 +23,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   int get homeIndex;
   BuiltList<Problem> get problems;
   Location get location;
+  V3RoutesResponse get routes;
   V3StopsByDistanceResponse get nearbyStops;
-  // V3StopResponse get stopDetails;
   V3DeparturesResponse get departures;
 
   static AppState initialState() => AppState((b) => b
@@ -43,7 +44,10 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
     ..departures.runs = MapBuilder<String, V3Run>()
     ..departures.status.health = 0
     ..departures.status.version = ''
-    ..departures.stops = MapBuilder<String, V3ResultStop>());
+    ..departures.stops = MapBuilder<String, V3ResultStop>()
+    ..routes.routes = ListBuilder<V3RouteWithStatus>()
+    ..routes.status.health = 0
+    ..routes.status.version = '');
 
   AppState._();
 

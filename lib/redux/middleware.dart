@@ -74,7 +74,7 @@ void Function(
       NextDispatcher next) async {
     next(action);
 
-    var routesResponse = await apiService.getRoutes(routeId: action.routeId);
+    var routesResponse = await apiService.getRoutes();
 
     store.dispatch(ActionStoreRoutes(response: routesResponse));
   };

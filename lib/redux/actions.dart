@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:ptv_api_client/model/v3_departures_response.dart';
-import 'package:ptv_api_client/model/v3_route_response.dart';
+import 'package:ptv_api_client/model/v3_routes_response.dart';
 import 'package:ptv_api_client/model/v3_stop_response.dart';
 import 'package:ptv_api_client/model/v3_stops_by_distance_response.dart';
 import 'package:ptv_clone/models/location.dart';
@@ -46,13 +46,12 @@ class ActionStoreNearbyStops extends Action {
 }
 
 class ActionGetRoutes extends Action {
-  ActionGetRoutes({@required this.routeId}) : super({'routeId': routeId});
-  final int routeId;
+  const ActionGetRoutes() : super(const {});
 }
 
 class ActionStoreRoutes extends Action {
   ActionStoreRoutes({@required this.response}) : super({'response': response});
-  final V3RouteResponse response;
+  final V3RoutesResponse response;
 }
 
 class ActionGetStopDetails extends Action {

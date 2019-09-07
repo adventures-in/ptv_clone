@@ -11,6 +11,9 @@ import 'package:ptv_api_client/model/v3_disruption_route.dart';
 import 'package:ptv_api_client/model/v3_disruption_stop.dart';
 import 'package:ptv_api_client/model/v3_result_stop.dart';
 import 'package:ptv_api_client/model/v3_route.dart';
+import 'package:ptv_api_client/model/v3_route_service_status.dart';
+import 'package:ptv_api_client/model/v3_route_with_status.dart';
+import 'package:ptv_api_client/model/v3_routes_response.dart';
 import 'package:ptv_api_client/model/v3_run.dart';
 import 'package:ptv_api_client/model/v3_status.dart';
 import 'package:ptv_api_client/model/v3_stop_geosearch.dart';
@@ -38,8 +41,4 @@ final Serializers serializers = (_$serializers.toBuilder()
         const FullType(BuiltList, [FullType(V3Departure)]),
         () => ListBuilder<V3Departure>(),
       ))
-    // ..addBuilderFactory(
-    //   const FullType(BuiltMap, [FullType(V3Disruption)]),
-    //   () => MapBuilder<String, V3Disruption>(),
-    // ))
     .build();
