@@ -25,7 +25,7 @@ void main() async {
       ApiService(departuresApi, stopsApi, runsApi, routesApi);
   final DeviceService deviceService = DeviceService(Geolocator());
 
-  final DevToolsStore store = DevToolsStore<AppState>(
+  final store = DevToolsStore<AppState>(
     appStateReducer,
     middleware: [
       remoteDevtools,

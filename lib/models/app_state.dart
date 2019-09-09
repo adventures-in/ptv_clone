@@ -25,7 +25,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   Location get location;
   V3RoutesResponse get routes;
   V3StopsByDistanceResponse get nearbyStops;
-  V3DeparturesResponse get departures;
+  BuiltMap<int, BuiltList<V3Departure>> get departuresByRoute;
 
   static AppState initialState() => AppState((b) => b
     ..homeIndex = 0
@@ -37,24 +37,16 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
     ..nearbyStops.status.health = 0
     ..nearbyStops.status.version = ''
     ..nearbyStops.stops = ListBuilder<V3StopGeosearch>()
-    ..departures.departures = ListBuilder<V3Departure>()
-    ..departures.directions = MapBuilder<String, V3Direction>()
-    ..departures.disruptions = MapBuilder<String, V3Disruption>()
-    ..departures.routes = MapBuilder<String, V3Route>()
-    ..departures.runs = MapBuilder<String, V3Run>()
-    ..departures.status.health = 0
-    ..departures.status.version = ''
-    ..departures.stops = MapBuilder<String, V3ResultStop>()
     ..routes.routes = ListBuilder<V3RouteWithStatus>()
     ..routes.status.health = 0
-    ..routes.status.version = '');
+    ..routes.status.version = ''
+    ..departuresByRoute = MapBuilder<int, BuiltList<V3Departure>>());
 
   AppState._();
 
-  factory AppState([updates(AppStateBuilder b)]) = _$AppState;
+  factory AppState([void updates(AppStateBuilder b)]) = _$AppState;
 
-  Map<String, Object> toJson() =>
-      serializers.serializeWith(AppState.serializer, this);
+  Object toJson() => serializers.serializeWith(AppState.serializer, this);
 
   static AppState fromJson(String jsonString) {
     return serializers.deserializeWith(

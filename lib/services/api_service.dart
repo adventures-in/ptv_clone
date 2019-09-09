@@ -15,7 +15,7 @@ class ApiService {
 
   Future<V3StopsByDistanceResponse> getStopsByLocation(
           double latitude, double longitude) =>
-      stopsApi.stopsStopsByGeolocation(-37.747650146484375, 145.07156175571774);
+      stopsApi.stopsStopsByGeolocation(latitude, longitude);
 
   Future<V3StopResponse> getStopDetails(
           {@required int stopId, @required int routeType}) =>

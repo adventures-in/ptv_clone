@@ -15,67 +15,70 @@ class Action {
 
 class ActionStoreNamedRoute extends Action {
   ActionStoreNamedRoute({@required this.routeName})
-      : super({'routeName': routeName});
+      : super(<String, Object>{'routeName': routeName});
   final String routeName;
 }
 
 class ActionStoreHome extends Action {
-  ActionStoreHome({@required this.index}) : super({'index': index});
+  ActionStoreHome({@required this.index})
+      : super(<String, Object>{'index': index});
   final int index;
 }
 
 class ActionAddProblem extends Action {
-  ActionAddProblem({@required this.problem}) : super({'problem': problem});
+  ActionAddProblem({@required this.problem})
+      : super(<String, Object>{'problem': problem});
   final Problem problem;
 }
 
 class ActionObserveLocation extends Action {
-  const ActionObserveLocation() : super(const {});
+  const ActionObserveLocation() : super(const <String, Object>{});
 }
 
 class ActionStoreLocation extends Action {
   ActionStoreLocation({@required this.location})
-      : super({'latitude': location});
+      : super(<String, Object>{'latitude': location});
   final Location location;
 }
 
 class ActionStoreNearbyStops extends Action {
   ActionStoreNearbyStops({@required this.nearbyStops})
-      : super({'nearbyStops': nearbyStops});
+      : super(<String, Object>{'nearbyStops': nearbyStops});
   final V3StopsByDistanceResponse nearbyStops;
 }
 
 class ActionGetRoutes extends Action {
-  const ActionGetRoutes() : super(const {});
+  const ActionGetRoutes() : super(const <String, Object>{});
 }
 
 class ActionStoreRoutes extends Action {
-  ActionStoreRoutes({@required this.response}) : super({'response': response});
+  ActionStoreRoutes({@required this.response})
+      : super(<String, Object>{'response': response});
   final V3RoutesResponse response;
 }
 
 class ActionGetStopDetails extends Action {
   ActionGetStopDetails({@required this.stopId, @required this.routeType})
-      : super({'stopId': stopId, 'routeType': routeType});
+      : super(<String, Object>{'stopId': stopId, 'routeType': routeType});
   final int stopId;
   final int routeType;
 }
 
 class ActionStoreStopDetails extends Action {
   ActionStoreStopDetails({@required this.response})
-      : super({'response': response});
+      : super(<String, Object>{'response': response});
   final V3StopResponse response;
 }
 
 class ActionGetDepartures extends Action {
   ActionGetDepartures({@required this.stopId, @required this.routeType})
-      : super({'stopId': stopId, 'routeType': routeType});
+      : super(<String, Object>{'stopId': stopId, 'routeType': routeType});
   final int stopId;
   final int routeType;
 }
 
 class ActionStoreDepartures extends Action {
   ActionStoreDepartures({@required this.response})
-      : super({'response': response});
+      : super(<String, Object>{'response': response});
   final V3DeparturesResponse response;
 }

@@ -15,9 +15,9 @@ abstract class Location implements Built<Location, LocationBuilder> {
 
   Location._();
 
-  factory Location([updates(LocationBuilder b)]) = _$Location;
+  factory Location([void updates(LocationBuilder b)]) = _$Location;
 
-  String toJson() {
+  Object toJson() {
     return json.encode(serializers.serializeWith(Location.serializer, this));
   }
 

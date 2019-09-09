@@ -20,7 +20,7 @@ void main() {
       ApiService(departuresApi, stopsApi, runsApi, routesApi);
   final DeviceService deviceService = DeviceService(Geolocator());
 
-  final Store store = Store<AppState>(
+  final store = Store<AppState>(
     appStateReducer,
     middleware: createMiddlewares(apiService, deviceService),
     initialState: AppState.initialState(),

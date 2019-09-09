@@ -11,7 +11,7 @@ import 'package:redux/redux.dart';
 class MyApp extends StatelessWidget {
   MyApp(this.store);
 
-  final Store store;
+  final Store<AppState> store;
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,8 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:ptv_api_client/model/v3_departures_response.dart';
+import 'package:ptv_api_client/model/v3_departure.dart';
 import 'package:ptv_api_client/model/v3_stop_geosearch.dart';
 import 'package:ptv_clone/models/app_state.dart';
 import 'package:ptv_clone/redux/actions.dart';
@@ -16,18 +17,21 @@ class StopDeparturesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final V3StopGeosearch stop = ModalRoute.of(context).settings.arguments;
+    final V3StopGeosearch stop =
+        ModalRoute.of(context).settings.arguments as V3StopGeosearch;
     return Scaffold(
       appBar: AppBar(
         title: Text("Second Route"),
       ),
-      body: StoreConnector<AppState, V3DeparturesResponse>(
-        converter: (store) => store.state.departures,
-        builder: (context, departuresResponse) {
+      body: StoreConnector<AppState, BuiltMap<int, BuiltList<V3Departure>>>(
+        converter: (store) => store.state.departuresByRoute,
+        builder: (context, departuresByRoute) {
           return ListView.builder(
-              itemCount: departuresResponse.departures.length,
+              itemCount: departuresByRoute.keys.length,
               itemBuilder: (context, index) {
-                final departure = departuresResponse.departures[index];
+                final departure =
+                    departuresByRoute[departuresByRoute.keys.elementAt(index)]
+                        .first;
                 return AnimationConfiguration.staggeredList(
                   position: index,
                   duration: const Duration(milliseconds: 375),
@@ -37,9 +41,9 @@ class StopDeparturesList extends StatelessWidget {
                       child: ListTile(
                           leading: RouteIcon(stop.routeType),
                           title: Text(
-                              'stop: ${departure.stopId}, direction: ${departure.directionId}'),
+                              'routeId: ${departure.routeId} : ${departure.directionId}'),
                           subtitle: Text(
-                              'departs at ${departure.estimatedDepartureUtc}'),
+                              'departs at ${departure.scheduledDepartureUtc.toIso8601String()}'),
                           onTap: () {
                             StoreProvider.of<AppState>(context).dispatch(
                                 ActionStoreNamedRoute(routeName: 'second'));

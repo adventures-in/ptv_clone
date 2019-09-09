@@ -1,14 +1,17 @@
+import 'package:built_collection/built_collection.dart';
+import 'package:ptv_api_client/model/v3_departure.dart';
 import 'package:ptv_clone/models/app_state.dart';
 import 'package:ptv_clone/redux/actions.dart';
 import 'package:redux/redux.dart';
 
 /// Reducer
-final Function appStateReducer = combineReducers<AppState>(<Reducer<AppState>>[
+final AppState Function(AppState, dynamic) appStateReducer =
+    combineReducers<AppState>(<Reducer<AppState>>[
   TypedReducer<AppState, ActionStoreLocation>(_storeLocation),
   TypedReducer<AppState, ActionStoreHome>(_storeHome),
   TypedReducer<AppState, ActionAddProblem>(_addProblem),
   TypedReducer<AppState, ActionStoreNearbyStops>(_storeNearbyStopsWithTypes),
-  TypedReducer<AppState, ActionStoreDepartures>(_storeDepartures),
+  TypedReducer<AppState, ActionStoreDepartures>(_storeDeparturesByRoute),
   TypedReducer<AppState, ActionStoreRoutes>(_storeRoutes),
 ]);
 
@@ -29,8 +32,21 @@ AppState _storeNearbyStopsWithTypes(
         AppState state, ActionStoreNearbyStops action) =>
     state.rebuild((b) => b..nearbyStops = action.nearbyStops.toBuilder());
 
-AppState _storeDepartures(AppState state, ActionStoreDepartures action) =>
-    state.rebuild((b) => b..departures = action.response.toBuilder());
+AppState _storeDeparturesByRoute(AppState state, ActionStoreDepartures action) {
+  BuiltMap<int, BuiltList<V3Departure>> departuresByRoute =
+      BuiltMap<int, BuiltList<V3Departure>>();
+
+  for (V3Departure departure in action.response.departures) {
+    departuresByRoute = departuresByRoute.rebuild((b) =>
+        b..putIfAbsent(departure.directionId, () => BuiltList<V3Departure>()));
+    departuresByRoute = departuresByRoute.rebuild((b) =>
+        b[departure.directionId] =
+            b[departure.directionId].rebuild((b) => b..add(departure)));
+  }
+
+  return state
+      .rebuild((b) => b..departuresByRoute = departuresByRoute.toBuilder());
+}
 
 AppState _storeRoutes(AppState state, ActionStoreRoutes action) =>
     state.rebuild((b) => b..routes = action.response.toBuilder());
