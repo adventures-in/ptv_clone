@@ -1,21 +1,59 @@
+import 'package:built_collection/built_collection.dart';
+import 'package:ptv_api_client/model/v3_departure.dart';
+import 'package:ptv_api_client/model/v3_route_with_status.dart';
 import 'package:ptv_clone/models/app_state.dart';
-import 'package:ptv_clone/models/problem.dart';
 import 'package:ptv_clone/redux/actions.dart';
 import 'package:redux/redux.dart';
 
 /// Reducer
-final Function appStateReducer = combineReducers<AppState>(<Reducer<AppState>>[
-  TypedReducer<AppState, ActionSetHome>(_setHome),
+final AppState Function(AppState, dynamic) appStateReducer =
+    combineReducers<AppState>(<Reducer<AppState>>[
+  TypedReducer<AppState, ActionStoreHome>(_storeHome),
   TypedReducer<AppState, ActionAddProblem>(_addProblem),
+  TypedReducer<AppState, ActionStoreDepartures>(_storeDeparturesByRoute),
+  TypedReducer<AppState, ActionStoreLocation>(_storeLocation),
+  TypedReducer<AppState, ActionStoreNearbyStops>(_storeNearbyStopsWithTypes),
+  TypedReducer<AppState, ActionStoreRoutes>(_storeRoutes),
 ]);
 
 //
-AppState _setHome(AppState state, ActionSetHome action) =>
-    state.copyWith(homeIndex: action.index);
+AppState _storeHome(AppState state, ActionStoreHome action) =>
+    state.rebuild((b) => b..homeIndex = action.index);
 
-AppState _addProblem(AppState state, ActionAddProblem action) {
-  // add to the list of problems
-  final List<Problem> newProblems = <Problem>[action.problem] + state.problems;
+AppState _addProblem(AppState state, ActionAddProblem action) =>
+    state.rebuild((b) => b..problems.add(action.problem));
 
-  return state.copyWith(problems: newProblems);
+AppState _storeDeparturesByRoute(AppState state, ActionStoreDepartures action) {
+  BuiltMap<int, BuiltList<V3Departure>> departuresByRoute =
+      BuiltMap<int, BuiltList<V3Departure>>();
+
+  for (V3Departure departure in action.response.departures) {
+    departuresByRoute = departuresByRoute.rebuild((b) =>
+        b..putIfAbsent(departure.directionId, () => BuiltList<V3Departure>()));
+    departuresByRoute = departuresByRoute.rebuild((b) =>
+        b[departure.directionId] =
+            b[departure.directionId].rebuild((b) => b..add(departure)));
+  }
+
+  return state
+      .rebuild((b) => b..departuresByRoute = departuresByRoute.toBuilder());
+}
+
+AppState _storeLocation(AppState state, ActionStoreLocation action) =>
+    state.rebuild((b) => b
+      ..location.latitude = action.location.latitude
+      ..location.longitude = action.location.longitude
+      ..location.timestamp = action.location.timestamp);
+
+AppState _storeNearbyStopsWithTypes(
+        AppState state, ActionStoreNearbyStops action) =>
+    state.rebuild((b) => b..nearbyStops = action.nearbyStops.toBuilder());
+
+AppState _storeRoutes(AppState state, ActionStoreRoutes action) {
+  final routesById = Map<int, V3RouteWithStatus>();
+  for (V3RouteWithStatus route in action.response.routes) {
+    routesById[route.routeId] = route;
+  }
+  final builtRoutesById = BuiltMap<int, V3RouteWithStatus>(routesById);
+  return state.rebuild((b) => b..routesById = builtRoutesById.toBuilder());
 }
