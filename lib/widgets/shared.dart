@@ -11,16 +11,42 @@ final Map<int, String> routeNames = const {
 };
 
 class RouteIcon extends StatelessWidget {
-  const RouteIcon(
+  RouteIcon(
     this.routeType, {
     Key key,
   }) : super(key: key);
 
   final int routeType;
-  final Map<int, Icon> map = const {
-    0: Icon(Icons.train, color: Colors.red),
-    1: Icon(Icons.tram, color: Colors.green),
-    2: Icon(Icons.directions_bus, color: Colors.blue)
+  static const double radius = 30.0;
+
+  final Map<num, Container> map = {
+    0: Container(
+      width: radius,
+      height: radius,
+      decoration: BoxDecoration(
+        color: Colors.red,
+        shape: BoxShape.circle,
+      ),
+      child: Icon(Icons.train, color: Colors.white),
+    ),
+    1: Container(
+      width: radius,
+      height: radius,
+      decoration: BoxDecoration(
+        color: Colors.red,
+        shape: BoxShape.circle,
+      ),
+      child: Icon(Icons.tram, color: Colors.white),
+    ),
+    2: Container(
+      width: radius,
+      height: radius,
+      decoration: BoxDecoration(
+        color: Colors.orange,
+        shape: BoxShape.circle,
+      ),
+      child: Icon(Icons.directions_bus, color: Colors.white),
+    ),
   };
 
   @override

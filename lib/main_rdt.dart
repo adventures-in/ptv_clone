@@ -18,11 +18,28 @@ void main() async {
   await remoteDevtools.connect();
 
   final departuresApi = DeparturesApi();
-  final stopsApi = StopsApi();
+  final directionsApi = DirectionsApi();
+  final disruptionsApi = DisruptionsApi();
+  final outletsApi = OutletsApi();
+  final patternsApi = PatternsApi();
   final routesApi = RoutesApi();
+  final routeTypesApi = RouteTypesApi();
   final runsApi = RunsApi();
-  final ApiService apiService =
-      ApiService(departuresApi, stopsApi, runsApi, routesApi);
+  final searchApi = SearchApi();
+  final stopsApi = StopsApi();
+
+  final ApiService apiService = ApiService(
+    departuresApi,
+    directionsApi,
+    disruptionsApi,
+    outletsApi,
+    patternsApi,
+    routesApi,
+    routeTypesApi,
+    runsApi,
+    searchApi,
+    stopsApi,
+  );
   final DeviceService deviceService = DeviceService(Geolocator());
 
   final store = DevToolsStore<AppState>(

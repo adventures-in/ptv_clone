@@ -10,14 +10,14 @@ List<Middleware<AppState>> createMiddlewares(
     TypedMiddleware<AppState, ActionObserveLocation>(
       _getLocation(deviceService),
     ),
+    TypedMiddleware<AppState, ActionGetRoutes>(
+      _getRoutes(apiService),
+    ),
     TypedMiddleware<AppState, ActionStoreLocation>(
       _getStopsByLocation(apiService),
     ),
     TypedMiddleware<AppState, ActionGetStopDetails>(
       _getStopDetails(apiService),
-    ),
-    TypedMiddleware<AppState, ActionGetRoutes>(
-      _getRoutes(apiService),
     ),
     TypedMiddleware<AppState, ActionGetDepartures>(
       _getDepartures(apiService),
@@ -40,14 +40,28 @@ void Function(Store<AppState> store, ActionObserveLocation action,
 }
 
 void Function(
+        Store<AppState> store, ActionGetRoutes action, NextDispatcher next)
+    _getRoutes(ApiService apiService) {
+  return (Store<AppState> store, ActionGetRoutes action,
+      NextDispatcher next) async {
+    next(action);
+
+    var routesResponse = await apiService.getRoutes();
+
+    store.dispatch(ActionStoreRoutes(response: routesResponse));
+  };
+}
+
+void Function(
         Store<AppState> store, ActionStoreLocation action, NextDispatcher next)
     _getStopsByLocation(ApiService apiService) {
   return (Store<AppState> store, ActionStoreLocation action,
       NextDispatcher next) async {
     next(action);
 
-    var nearbyStopsResponse = await apiService.getStopsByLocation(
-        action.location.latitude, action.location.longitude);
+    var nearbyStopsResponse = await apiService.getStopsByGeolocation(
+        latitude: action.location.latitude,
+        longitude: action.location.longitude);
 
     store.dispatch(ActionStoreNearbyStops(nearbyStops: nearbyStopsResponse));
   };
@@ -68,28 +82,29 @@ void Function(
 }
 
 void Function(
-        Store<AppState> store, ActionGetRoutes action, NextDispatcher next)
-    _getRoutes(ApiService apiService) {
-  return (Store<AppState> store, ActionGetRoutes action,
-      NextDispatcher next) async {
-    next(action);
-
-    var routesResponse = await apiService.getRoutes();
-
-    store.dispatch(ActionStoreRoutes(response: routesResponse));
-  };
-}
-
-void Function(
         Store<AppState> store, ActionGetDepartures action, NextDispatcher next)
     _getDepartures(ApiService apiService) {
   return (Store<AppState> store, ActionGetDepartures action,
       NextDispatcher next) async {
     next(action);
 
-    var departuresResponse = await apiService.getDepartures(
+    var departuresResponse = await apiService.getDeparturesForStop(
         stopId: action.stopId, routeType: action.routeType);
 
     store.dispatch(ActionStoreDepartures(response: departuresResponse));
+  };
+}
+
+void Function(
+        Store<AppState> store, ActionGetDirections action, NextDispatcher next)
+    _getDirections(ApiService apiService) {
+  return (Store<AppState> store, ActionGetDirections action,
+      NextDispatcher next) async {
+    next(action);
+
+    var directionsResponse =
+        await apiService.getDirectionsForRoute(routeId: action.routeId);
+
+    store.dispatch(ActionStoreDirections(response: directionsResponse));
   };
 }

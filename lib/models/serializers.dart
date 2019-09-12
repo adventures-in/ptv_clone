@@ -9,7 +9,6 @@ import 'package:ptv_api_client/model/v3_disruption_route.dart';
 import 'package:ptv_api_client/model/v3_disruption_stop.dart';
 import 'package:ptv_api_client/model/v3_route_service_status.dart';
 import 'package:ptv_api_client/model/v3_route_with_status.dart';
-import 'package:ptv_api_client/model/v3_routes_response.dart';
 import 'package:ptv_api_client/model/v3_status.dart';
 import 'package:ptv_api_client/model/v3_stop_geosearch.dart';
 import 'package:ptv_api_client/model/v3_stops_by_distance_response.dart';
@@ -23,7 +22,7 @@ part 'serializers.g.dart';
 /// all the generated serializers.
 ///
 /// Collection of generated serializers for the built_value chat example.
-@SerializersFor(const [AppState, Location, V3Departure])
+@SerializersFor([AppState, Location, V3Departure])
 final Serializers serializers = (_$serializers.toBuilder()
       ..addPlugin(StandardJsonPlugin())
       ..add(Iso8601DateTimeSerializer())

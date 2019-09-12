@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:ptv_api_client/api.dart';
 import 'package:ptv_api_client/model/v3_departures_response.dart';
 import 'package:ptv_api_client/model/v3_routes_response.dart';
 import 'package:ptv_api_client/model/v3_stop_response.dart';
@@ -81,4 +82,16 @@ class ActionStoreDepartures extends Action {
   ActionStoreDepartures({@required this.response})
       : super(<String, Object>{'response': response});
   final V3DeparturesResponse response;
+}
+
+class ActionGetDirections extends Action {
+  const ActionGetDirections({@required this.routeId})
+      : super(const <String, Object>{});
+  final int routeId;
+}
+
+class ActionStoreDirections extends Action {
+  ActionStoreDirections({@required this.response})
+      : super(<String, Object>{'response': response});
+  final V3DirectionsResponse response;
 }
