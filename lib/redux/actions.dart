@@ -84,6 +84,25 @@ class ActionStoreDepartures extends Action {
   final V3DeparturesResponse response;
 }
 
+class ActionGetDeparturesForRoute extends Action {
+  ActionGetDeparturesForRoute(
+      {@required this.routeType, @required this.stopId, @required this.routeId})
+      : super(<String, Object>{
+          'routeType': routeType,
+          'stopId': stopId,
+          'routeId': routeId,
+        });
+  final int routeType;
+  final int stopId;
+  final String routeId;
+}
+
+class ActionStoreDeparturesForRoute extends Action {
+  ActionStoreDeparturesForRoute({@required this.response})
+      : super(<String, Object>{'response': response});
+  final V3DeparturesResponse response;
+}
+
 class ActionGetDirections extends Action {
   const ActionGetDirections({@required this.routeId})
       : super(const <String, Object>{});

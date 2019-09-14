@@ -24,19 +24,62 @@ AppState _addProblem(AppState state, ActionAddProblem action) =>
     state.rebuild((b) => b..problems.add(action.problem));
 
 AppState _storeDeparturesByRoute(AppState state, ActionStoreDepartures action) {
-  BuiltMap<int, BuiltList<V3Departure>> departuresByRoute =
-      BuiltMap<int, BuiltList<V3Departure>>();
+  // BuiltMap<int, BuiltList<V3Departure>> departuresByRoute =
+  //     BuiltMap<int, BuiltList<V3Departure>>();
 
+  // for (V3Departure departure in action.response.departures) {
+  //   departuresByRoute = departuresByRoute.rebuild((b) =>
+  //       b..putIfAbsent(departure.directionId, () => BuiltList<V3Departure>()));
+  //   departuresByRoute = departuresByRoute.rebuild((b) =>
+  //       b[departure.directionId] =
+  //           b[departure.directionId].rebuild((b) => b..add(departure)));
+  // }
+
+  // return state
+  //     .rebuild((b) => b..departuresByRoute = departuresByRoute.toBuilder());
+
+  // return state.rebuild((b) => b
+  //   ..stopDeparturesViewModel.departuresResponse = action.response.toBuilder());
+
+  final departuresByRoute = Map<int, List<V3Departure>>();
+  final nextDeparturesByRoute = Map<int, V3Departure>();
   for (V3Departure departure in action.response.departures) {
-    departuresByRoute = departuresByRoute.rebuild((b) =>
-        b..putIfAbsent(departure.directionId, () => BuiltList<V3Departure>()));
-    departuresByRoute = departuresByRoute.rebuild((b) =>
-        b[departure.directionId] =
-            b[departure.directionId].rebuild((b) => b..add(departure)));
+    // store all departures against the routeId, in order
+    departuresByRoute[departure.routeId] ??= List<V3Departure>();
+    departuresByRoute[departure.routeId].add(departure);
+  }
+  // for (List<V3Departure> departures in departuresByRoute.values) {
+  //   for(V3Departure departure in departures) {
+
+  //   }
+  //   // store the next departure for each
+  //   if(nextDeparturesByRoute[departure.routeId] == null) {
+  //     nextDeparturesByRoute[departure.routeId] = departure;
+  //   }
+  //   else {
+  //     nextDeparturesByRoute[departure.routeId].
+  //   }
+  // }
+
+  // final nextDepartureTimeStrings = List<String>();
+  // final DateTime scheduledLocalTime = nextDeparture.scheduledDepartureUtc.toLocal();
+  // final amPm = (scheduledLocalTime.hour < 12) ? 'am' : 'pm';
+  // String timeString =
+  //       '${scheduledLocalTime.hour}:${scheduledLocalTime.minute} $amPm to ';
+  //   nextDepartureTimeStrings.add
+
+  final listOfDepartureLists = List<BuiltList<V3Departure>>();
+  for (List<V3Departure> list in departuresByRoute.values) {
+    listOfDepartureLists.add(BuiltList<V3Departure>(list));
   }
 
-  return state
-      .rebuild((b) => b..departuresByRoute = departuresByRoute.toBuilder());
+  return state.rebuild((b) => b
+    ..stopDeparturesViewModel.departuresResponse = action.response.toBuilder()
+    ..stopDeparturesViewModel.numDepartures = departuresByRoute.keys.length
+    ..stopDeparturesViewModel.routeIds =
+        ListBuilder<int>(departuresByRoute.keys)
+    ..stopDeparturesViewModel.todaysDepartureLists =
+        BuiltList<BuiltList<V3Departure>>(listOfDepartureLists).toBuilder());
 }
 
 AppState _storeLocation(AppState state, ActionStoreLocation action) =>
@@ -57,3 +100,37 @@ AppState _storeRoutes(AppState state, ActionStoreRoutes action) {
   final builtRoutesById = BuiltMap<int, V3RouteWithStatus>(routesById);
   return state.rebuild((b) => b..routesById = builtRoutesById.toBuilder());
 }
+
+// V3Departure nextDeparture;
+//                       final routeId = departuresByRoute.keys.elementAt(index);
+//                       for (V3Departure departure
+//                           in departuresByRoute[routeId]) {
+//                         if (departure.scheduledDepartureUtc.isAfter(nowTime)) {
+//                           nextDeparture = departure;
+//                           break;
+//                         }
+//                       }
+
+//                       StoreProvider.of<AppState>(context).dispatch(
+//                         ActionGetDeparturesForRoute(
+//                           routeType: stop.routeType,
+//                           stopId: stop.stopId,
+//                           routeId: routeId.toString(),
+//                         ),
+//                       );
+
+//
+
+//                       Duration duration;
+//                       if (nextDeparture.estimatedDepartureUtc != null) {
+//                         duration = nowTime
+//                             .difference(nextDeparture.estimatedDepartureUtc);
+//                       } else {
+//                         duration = nextDeparture.scheduledDepartureUtc
+//                             .difference(nowTime);
+//                       }
+
+//
+//
+//
+// '${duration.inMinutes}'

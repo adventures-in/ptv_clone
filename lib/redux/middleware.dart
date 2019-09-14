@@ -22,6 +22,9 @@ List<Middleware<AppState>> createMiddlewares(
     TypedMiddleware<AppState, ActionGetDepartures>(
       _getDepartures(apiService),
     ),
+    TypedMiddleware<AppState, ActionGetDeparturesForRoute>(
+      _getDeparturesForRoute(apiService),
+    ),
   ];
 }
 
@@ -92,6 +95,21 @@ void Function(
         stopId: action.stopId, routeType: action.routeType);
 
     store.dispatch(ActionStoreDepartures(response: departuresResponse));
+  };
+}
+
+void Function(Store<AppState> store, ActionGetDeparturesForRoute action,
+    NextDispatcher next) _getDeparturesForRoute(ApiService apiService) {
+  return (Store<AppState> store, ActionGetDeparturesForRoute action,
+      NextDispatcher next) async {
+    next(action);
+
+    var departuresResponse = await apiService.getDeparturesForStopAndRoute(
+        routeType: action.routeType,
+        stopId: action.stopId,
+        routeId: action.routeId);
+
+    store.dispatch(ActionStoreDeparturesForRoute(response: departuresResponse));
   };
 }
 

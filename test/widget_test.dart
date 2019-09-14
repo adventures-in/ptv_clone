@@ -5,26 +5,40 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-// import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'dart:async';
 
-// import 'package:ptv_clone/main.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:ptv_clone/widgets/questioning_widget.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // // Build our app and trigger a frame.
-    // await tester.pumpWidget(MyApp());
+  testWidgets('QuestioningWidget gets the right answer',
+      (WidgetTester tester) async {
+    await runZoned(() async {
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: QuestioningWidget(),
+        ),
+      ));
+    }, zoneValues: <dynamic, bool>{#i_am_in_a_test: true});
 
-    // // Verify that our counter starts at 0.
-    // expect(find.text('0'), findsOneWidget);
-    // expect(find.text('1'), findsNothing);
-
-    // // Tap the '+' icon and trigger a frame.
-    // await tester.tap(find.byIcon(Icons.add));
-    // await tester.pump();
-
-    // // Verify that our counter has incremented.
-    // expect(find.text('0'), findsNothing);
-    // expect(find.text('1'), findsOneWidget);
+    expect(find.text('this is a test'), findsOneWidget);
+    expect(find.text('this is not a test'), findsNothing);
   });
+
+  // runZoned(() {
+  //   testWidgets('QuestioningWidget gets the right answer',
+  //       (WidgetTester tester) async {
+  //     await tester.pumpWidget(
+  //       MaterialApp(
+  //         home: Scaffold(
+  //           body: QuestioningWidget(),
+  //         ),
+  //       ),
+  //     );
+
+  //     expect(find.text('this is a test'), findsOneWidget);
+  //     expect(find.text('this is not a test'), findsNothing);
+  //   });
+  // }, zoneValues: <dynamic, bool>{#i_am_in_a_test: true});
 }
