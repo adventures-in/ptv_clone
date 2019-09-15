@@ -24,6 +24,12 @@ AppState _addProblem(AppState state, ActionAddProblem action) =>
     state.rebuild((b) => b..problems.add(action.problem));
 
 AppState _storeDeparturesByRoute(AppState state, ActionStoreDepartures action) {
+  // TODO(nickm):
+  //  - create a class to hold 2 members: routeId and directionId (DepartureIdentifier)
+  //  - create a Map<DepartureIdentifier, List<V3Departure>>
+  //  - iterate over V3DepartureResponse and populate map
+  //  - calculate nextDeparture for each DepartureIdentifier
+
   // BuiltMap<int, BuiltList<V3Departure>> departuresByRoute =
   //     BuiltMap<int, BuiltList<V3Departure>>();
 
