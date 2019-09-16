@@ -5,7 +5,7 @@ import 'package:ptv_api_client/api.dart';
 import 'package:ptv_clone/models/app_state.dart';
 import 'package:ptv_clone/redux/actions.dart';
 import 'package:ptv_clone/widgets/shared.dart';
-import 'package:ptv_clone/widgets/stop_departures.dart';
+import 'package:ptv_clone/widgets/stop_departures_page.dart';
 import 'package:redux/redux.dart';
 
 class MyApp extends StatelessWidget {
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => MyScaffold(),
-          '/stop_departures': (context) => StopDeparturesList(),
+          '/stop_departures': (context) => StopDeparturesPage(),
         },
       ),
     );
@@ -122,7 +122,7 @@ class NearbyStopsList extends StatelessWidget {
                                   stopId: stop.stopId,
                                   routeType: stop.routeType));
                           Navigator.pushNamed(
-                              context, StopDeparturesList.routeName,
+                              context, StopDeparturesPage.routeName,
                               arguments: stop);
                         }),
                   ),

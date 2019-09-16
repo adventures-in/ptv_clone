@@ -55,12 +55,10 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
     ..stopDeparturesViewModel.departuresResponse.stops =
         MapBuilder<String, V3ResultStop>()
     ..stopDeparturesViewModel.nextDepartures = ListBuilder<V3Departure>()
-    ..stopDeparturesViewModel.nowTime = DateTime.now().toUtc()
     ..stopDeparturesViewModel.routeIds = ListBuilder<int>()
     ..stopDeparturesViewModel.routes = ListBuilder<V3Route>()
-    ..stopDeparturesViewModel.scheduledLocalTimes = ListBuilder<DateTime>()
     ..stopDeparturesViewModel.timeStrings = ListBuilder<String>()
-    ..stopDeparturesViewModel.todaysDepartureLists =
+    ..stopDeparturesViewModel.todaysDepartures =
         ListBuilder<BuiltList<V3Departure>>()
     ..stopDeparturesViewModel.numDepartures = 0
     ..departuresByRoute = MapBuilder<int, BuiltList<V3Departure>>()

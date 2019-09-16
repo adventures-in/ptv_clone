@@ -3,39 +3,49 @@ import 'package:ptv_api_client/api.dart';
 
 import 'package:ptv_clone/utilities/credentials.dart';
 
+/////////////////////////////////////////////////////////
 /// Departures
-///  - departuresGetForStop
-///  - departuresGetForStopAndRoute
+///  [departuresGetForStop]
+///  [departuresGetForStopAndRoute]
+/////////////////////////////////////////////////////////
 /// Directons
-///  - directionsForDirection
-///  - directionsForDirectionAndType
-///  - directionsForRoute
+///  [directionsForDirection]
+///  [directionsForDirectionAndType]
+///  [directionsForRoute]
+/////////////////////////////////////////////////////////
 /// Disruptions
-///  - disruptionsGetAllDisruptions
-///  - disruptionsGetDisruptionById
-///  - disruptionsGetDisruptionModes
-///  - disruptionsGetDisruptionsByRoute
-///  - disruptionsGetDisruptionsByRouteAndStop
-///  - disruptionsGetDisruptionsByStop
+///  [disruptionsGetAllDisruptions]
+///  [disruptionsGetDisruptionById]
+///  [disruptionsGetDisruptionModes]
+///  [disruptionsGetDisruptionsByRoute]
+///  [disruptionsGetDisruptionsByRouteAndStop]
+///  [disruptionsGetDisruptionsByStop]
+/////////////////////////////////////////////////////////
 /// Outlets
-///  - outletsGetAllOutlets
-///  - outletsGetOutletsByGeolocation
+///  [outletsGetAllOutlets]
+///  [outletsGetOutletsByGeolocation]
+/////////////////////////////////////////////////////////
 /// Patterns
-///  - patternsGetPatternByRun
+///  [patternsGetPatternByRun]
+/////////////////////////////////////////////////////////
 /// Routes
-///  - routesOneOrMoreRoutes
-///  - routesRouteFromId
+///  [routesOneOrMoreRoutes]
+///  [routesRouteFromId]
+/////////////////////////////////////////////////////////
 /// RouteTypes
-///  - routeTypesGetRouteTypes
+///  [routeTypesGetRouteTypes]
+/////////////////////////////////////////////////////////
 /// Runs
-///  - runsForRoute
+///  [runsForRoute]
+/////////////////////////////////////////////////////////
 /// Search
-///  - searchSearch
+///  [searchSearch]
+/////////////////////////////////////////////////////////
 /// Stops
-///  - stopsStopDetails
-///  - stopsStopsByGeolocation
-///  - stopsStopsForRoute
-
+///  [stopsStopDetails]
+///  [stopsStopsByGeolocation]
+///  [stopsStopsForRoute]
+/////////////////////////////////////////////////////////
 class ApiService {
   ApiService(
       this.departuresApi,
@@ -217,7 +227,7 @@ class ApiService {
   /// Search
   /////////////////////////////////////////////////////////////////////
 
-  Future<V3SearchResult> getS(
+  Future<V3SearchResult> performSearch(
           {@required String searchTerm,
           List<int> routeTypes,
           double latitude,

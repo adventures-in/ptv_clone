@@ -2,6 +2,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:ptv_api_client/model/v3_departure.dart';
 import 'package:ptv_api_client/model/v3_route_with_status.dart';
 import 'package:ptv_clone/models/app_state.dart';
+import 'package:ptv_clone/models/stop_departures_view_model.dart';
 import 'package:ptv_clone/redux/actions.dart';
 import 'package:redux/redux.dart';
 
@@ -24,68 +25,50 @@ AppState _addProblem(AppState state, ActionAddProblem action) =>
     state.rebuild((b) => b..problems.add(action.problem));
 
 AppState _storeDeparturesByRoute(AppState state, ActionStoreDepartures action) {
-  // TODO(nickm):
-  //  - create a class to hold 2 members: routeId and directionId (DepartureIdentifier)
-  //  - create a Map<DepartureIdentifier, List<V3Departure>>
-  //  - iterate over V3DepartureResponse and populate map
-  //  - calculate nextDeparture for each DepartureIdentifier
-
-  // BuiltMap<int, BuiltList<V3Departure>> departuresByRoute =
-  //     BuiltMap<int, BuiltList<V3Departure>>();
-
-  // for (V3Departure departure in action.response.departures) {
-  //   departuresByRoute = departuresByRoute.rebuild((b) =>
-  //       b..putIfAbsent(departure.directionId, () => BuiltList<V3Departure>()));
-  //   departuresByRoute = departuresByRoute.rebuild((b) =>
-  //       b[departure.directionId] =
-  //           b[departure.directionId].rebuild((b) => b..add(departure)));
-  // }
-
-  // return state
-  //     .rebuild((b) => b..departuresByRoute = departuresByRoute.toBuilder());
-
-  // return state.rebuild((b) => b
-  //   ..stopDeparturesViewModel.departuresResponse = action.response.toBuilder());
-
-  final departuresByRoute = Map<int, List<V3Departure>>();
-  final nextDeparturesByRoute = Map<int, V3Departure>();
+  final departuresByCategory = Map<DepartureCategory, List<V3Departure>>();
   for (V3Departure departure in action.response.departures) {
+    final category =
+        DepartureCategory(departure.routeId, departure.directionId);
     // store all departures against the routeId, in order
-    departuresByRoute[departure.routeId] ??= List<V3Departure>();
-    departuresByRoute[departure.routeId].add(departure);
+    departuresByCategory[category] ??= List<V3Departure>();
+    departuresByCategory[category].add(departure);
   }
-  // for (List<V3Departure> departures in departuresByRoute.values) {
-  //   for(V3Departure departure in departures) {
 
-  //   }
-  //   // store the next departure for each
-  //   if(nextDeparturesByRoute[departure.routeId] == null) {
-  //     nextDeparturesByRoute[departure.routeId] = departure;
-  //   }
-  //   else {
-  //     nextDeparturesByRoute[departure.routeId].
-  //   }
-  // }
+  final routeIds = List<int>();
+  final nextDepartures = Map<DepartureCategory, V3Departure>();
+  final nowUtc = DateTime.now().toUtc();
+  final nextDepartureTimeStrings = Map<DepartureCategory, String>();
+  for (DepartureCategory category in departuresByCategory.keys) {
+    routeIds.add(category.routeId);
+    nextDepartures[category] = departuresByCategory[category].firstWhere(
+        (departure) => departure.scheduledDepartureUtc.isAfter(nowUtc),
+        orElse: () => departuresByCategory[category].last);
 
-  // final nextDepartureTimeStrings = List<String>();
-  // final DateTime scheduledLocalTime = nextDeparture.scheduledDepartureUtc.toLocal();
-  // final amPm = (scheduledLocalTime.hour < 12) ? 'am' : 'pm';
-  // String timeString =
-  //       '${scheduledLocalTime.hour}:${scheduledLocalTime.minute} $amPm to ';
-  //   nextDepartureTimeStrings.add
+    final DateTime scheduledLocalTime =
+        nextDepartures[category].scheduledDepartureUtc.toLocal();
+    final amPm = (scheduledLocalTime.hour < 12) ? 'AM' : 'PM';
+    String timeString =
+        '${scheduledLocalTime.hour}:${scheduledLocalTime.minute} $amPm';
+    nextDepartureTimeStrings[category] = timeString;
+  }
 
   final listOfDepartureLists = List<BuiltList<V3Departure>>();
-  for (List<V3Departure> list in departuresByRoute.values) {
+  for (List<V3Departure> list in departuresByCategory.values) {
     listOfDepartureLists.add(BuiltList<V3Departure>(list));
   }
 
-  return state.rebuild((b) => b
-    ..stopDeparturesViewModel.departuresResponse = action.response.toBuilder()
-    ..stopDeparturesViewModel.numDepartures = departuresByRoute.keys.length
-    ..stopDeparturesViewModel.routeIds =
-        ListBuilder<int>(departuresByRoute.keys)
-    ..stopDeparturesViewModel.todaysDepartureLists =
-        BuiltList<BuiltList<V3Departure>>(listOfDepartureLists).toBuilder());
+  return state.rebuild(
+    (b) => b
+      ..stopDeparturesViewModel.departuresResponse = action.response.toBuilder()
+      ..stopDeparturesViewModel.numDepartures = departuresByCategory.keys.length
+      ..stopDeparturesViewModel.routeIds = ListBuilder<int>(routeIds)
+      ..stopDeparturesViewModel.todaysDepartures =
+          ListBuilder<BuiltList<V3Departure>>(listOfDepartureLists)
+      ..stopDeparturesViewModel.nextDepartures =
+          ListBuilder<V3Departure>(nextDepartures.values)
+      ..stopDeparturesViewModel.timeStrings =
+          ListBuilder<String>(nextDepartureTimeStrings.values),
+  );
 }
 
 AppState _storeLocation(AppState state, ActionStoreLocation action) =>

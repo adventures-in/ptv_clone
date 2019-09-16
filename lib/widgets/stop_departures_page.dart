@@ -7,8 +7,8 @@ import 'package:ptv_clone/models/app_state.dart';
 import 'package:ptv_clone/models/stop_departures_view_model.dart';
 import 'package:ptv_clone/widgets/shared.dart';
 
-class StopDeparturesList extends StatelessWidget {
-  const StopDeparturesList({
+class StopDeparturesPage extends StatelessWidget {
+  const StopDeparturesPage({
     Key key,
   }) : super(key: key);
 
@@ -57,6 +57,8 @@ class StopDeparturesList extends StatelessWidget {
                           StoreProvider.of<AppState>(context)
                               .state
                               .routesById[routeId];
+                      V3Departure nextDeparture =
+                          viewmodel.nextDepartures.elementAt(index);
                       return AnimationConfiguration.staggeredList(
                         position: index,
                         duration: const Duration(milliseconds: 375),
@@ -68,8 +70,8 @@ class StopDeparturesList extends StatelessWidget {
                                 RouteIcon(stop.routeType),
                                 Text(route.routeNumber)
                               ]),
-                              title: Text(
-                                  'hello'), // viewmodel.timeStrings.elementAt(index)
+                              title:
+                                  Text(viewmodel.timeStrings.elementAt(index)),
                               subtitle: Text('${route.routeName}'),
                               onTap: () {
                                 // StoreProvider.of<AppState>(context).dispatch(
@@ -85,7 +87,7 @@ class StopDeparturesList extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(5.0)),
                                 onPressed: () {},
                                 child: Text(
-                                  '', //
+                                  '${viewmodel.timeStrings.elementAt(index)}', //
                                   style: TextStyle(fontSize: 20.0),
                                 ),
                               ),

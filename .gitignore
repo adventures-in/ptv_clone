@@ -6,6 +6,8 @@ lib/utilities/credentials.dart
 lib/utilities/mocks.dart
 # Build files produced by an XCode build 
 ios/Build
+# flutter keeps creating this file but the file says don't check in
+ios/Flutter/flutter_export_environment.sh
 
 ## Original .gitignore
 
