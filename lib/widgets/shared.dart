@@ -33,7 +33,7 @@ class RouteIcon extends StatelessWidget {
       width: radius,
       height: radius,
       decoration: BoxDecoration(
-        color: Colors.red,
+        color: Colors.lightGreen,
         shape: BoxShape.circle,
       ),
       child: Icon(Icons.tram, color: Colors.white),
@@ -43,6 +43,24 @@ class RouteIcon extends StatelessWidget {
       height: radius,
       decoration: BoxDecoration(
         color: Colors.orange,
+        shape: BoxShape.circle,
+      ),
+      child: Icon(Icons.directions_bus, color: Colors.white),
+    ),
+    3: Container(
+      width: radius,
+      height: radius,
+      decoration: BoxDecoration(
+        color: Colors.orange,
+        shape: BoxShape.circle,
+      ),
+      child: Icon(Icons.directions_bus, color: Colors.white),
+    ),
+    4: Container(
+      width: radius,
+      height: radius,
+      decoration: BoxDecoration(
+        color: Colors.blueGrey,
         shape: BoxShape.circle,
       ),
       child: Icon(Icons.directions_bus, color: Colors.white),

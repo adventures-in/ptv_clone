@@ -1,4 +1,10 @@
+import 'package:built_collection/built_collection.dart';
+import 'package:ptv_api_client/api.dart';
+import 'package:ptv_api_client/api/directions_api.dart';
+import 'package:ptv_api_client/model/v3_departure.dart';
+import 'package:ptv_api_client/model/v3_direction.dart';
 import 'package:ptv_clone/models/app_state.dart';
+import 'package:ptv_clone/models/stop_departures_view_model.dart';
 import 'package:ptv_clone/redux/actions.dart';
 import 'package:ptv_clone/services/api_service.dart';
 import 'package:ptv_clone/services/device_service.dart';
@@ -19,8 +25,8 @@ List<Middleware<AppState>> createMiddlewares(
     TypedMiddleware<AppState, ActionGetStopDetails>(
       _getStopDetails(apiService),
     ),
-    TypedMiddleware<AppState, ActionGetDepartures>(
-      _getDepartures(apiService),
+    TypedMiddleware<AppState, ActionGetStopDepartures>(
+      _getStopDepartures(apiService),
     ),
     TypedMiddleware<AppState, ActionGetDeparturesForRoute>(
       _getDeparturesForRoute(apiService),
@@ -84,17 +90,77 @@ void Function(
   };
 }
 
-void Function(
-        Store<AppState> store, ActionGetDepartures action, NextDispatcher next)
-    _getDepartures(ApiService apiService) {
-  return (Store<AppState> store, ActionGetDepartures action,
+void Function(Store<AppState> store, ActionGetStopDepartures action,
+    NextDispatcher next) _getStopDepartures(ApiService apiService) {
+  return (Store<AppState> store, ActionGetStopDepartures action,
       NextDispatcher next) async {
     next(action);
 
-    var departuresResponse = await apiService.getDeparturesForStop(
+    var response = await apiService.getDeparturesForStop(
         stopId: action.stopId, routeType: action.routeType);
 
-    store.dispatch(ActionStoreDepartures(response: departuresResponse));
+    final departuresByCategory = Map<DepartureCategory, List<V3Departure>>();
+    for (V3Departure departure in response.departures) {
+      final category =
+          DepartureCategory(departure.routeId, departure.directionId);
+      // store all departures against the routeId, in order
+      departuresByCategory[category] ??= List<V3Departure>();
+      departuresByCategory[category].add(departure);
+    }
+
+    final routeIdsList = List<int>();
+    final routeIdsSet = Set<int>();
+    final nextDepartures = Map<DepartureCategory, V3Departure>();
+    final nowUtc = DateTime.now().toUtc();
+    final nextDepartureTimeStrings = Map<DepartureCategory, String>();
+    final directionNames = Map<DepartureCategory, String>();
+    for (DepartureCategory category in departuresByCategory.keys) {
+      routeIdsList.add(category.routeId);
+      routeIdsSet.add(category.routeId);
+      // TODO: try departuresGetForStopAndRoute and see if we get estimated departure time
+      // TODO: try getDirections
+
+      // determine the next departure
+      nextDepartures[category] = departuresByCategory[category].firstWhere(
+          (departure) => departure.scheduledDepartureUtc.isAfter(nowUtc),
+          orElse: () => departuresByCategory[category].first);
+      // convert time to strings for the UI
+      final DateTime scheduledLocalTime =
+          nextDepartures[category].scheduledDepartureUtc.toLocal();
+      final amPm = (scheduledLocalTime.hour < 12) ? 'AM' : 'PM';
+      String timeString =
+          '${scheduledLocalTime.hour % 12}:${scheduledLocalTime.minute} $amPm';
+      nextDepartureTimeStrings[category] = timeString;
+    }
+
+    for (int routeId in routeIdsSet) {
+      final response = await apiService.getDirectionsForRoute(routeId: routeId);
+      for (V3DirectionWithDescription direction in response.directions) {
+        final category =
+            DepartureCategory(direction.routeId, direction.directionId);
+        directionNames[category] = direction.directionName;
+      }
+    }
+
+    // Create a BuiltList from each List for the viewmodels nested BuiltList
+    final listOfDepartureLists = List<BuiltList<V3Departure>>();
+    for (List<V3Departure> list in departuresByCategory.values) {
+      listOfDepartureLists.add(BuiltList<V3Departure>(list));
+    }
+
+    final viewmodel = StopDeparturesViewModel(
+      (b) => b
+        ..departuresResponse = response.toBuilder()
+        ..numDepartures = departuresByCategory.keys.length
+        ..routeIds = ListBuilder<int>(routeIdsList)
+        ..todaysDepartures =
+            ListBuilder<BuiltList<V3Departure>>(listOfDepartureLists)
+        ..directionNames = ListBuilder<String>(directionNames.values)
+        ..nextDepartures = ListBuilder<V3Departure>(nextDepartures.values)
+        ..timeStrings = ListBuilder<String>(nextDepartureTimeStrings.values),
+    );
+
+    store.dispatch(ActionStoreStopDepartures(viewmodel: viewmodel));
   };
 }
 

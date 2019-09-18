@@ -118,7 +118,7 @@ class NearbyStopsList extends StatelessWidget {
                           StoreProvider.of<AppState>(context).dispatch(
                               ActionStoreNamedRoute(routeName: 'second'));
                           StoreProvider.of<AppState>(context).dispatch(
-                              ActionGetDepartures(
+                              ActionGetStopDepartures(
                                   stopId: stop.stopId,
                                   routeType: stop.routeType));
                           Navigator.pushNamed(

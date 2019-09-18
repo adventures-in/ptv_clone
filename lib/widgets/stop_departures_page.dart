@@ -70,8 +70,8 @@ class StopDeparturesPage extends StatelessWidget {
                                 RouteIcon(stop.routeType),
                                 Text(route.routeNumber)
                               ]),
-                              title:
-                                  Text(viewmodel.timeStrings.elementAt(index)),
+                              title: Text(
+                                  '${viewmodel.timeStrings.elementAt(index)} to ${viewmodel.directionNames.elementAt(index)}'),
                               subtitle: Text('${route.routeName}'),
                               onTap: () {
                                 // StoreProvider.of<AppState>(context).dispatch(

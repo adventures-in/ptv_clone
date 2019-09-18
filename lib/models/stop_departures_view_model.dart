@@ -32,6 +32,7 @@ abstract class StopDeparturesViewModel
   BuiltList<V3Route> get routes;
   BuiltList<V3Departure> get nextDepartures;
   BuiltList<BuiltList<V3Departure>> get todaysDepartures;
+  BuiltList<String> get directionNames;
   BuiltList<String> get timeStrings;
   BuiltList<String> get durationStrings;
 
