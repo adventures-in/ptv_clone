@@ -45,13 +45,18 @@ class StopDeparturesPage extends StatelessWidget {
               ],
             ),
           ),
-          StoreConnector<AppState, BuiltMap<int, V3DeparturesResponse>>(
+          StoreConnector<AppState, V3DeparturesResponse>(
             converter: (store) => store.state.stopDepartures,
-            builder: (context, departures) {
+            builder: (context, response) {
               return Expanded(
                 child: ListView.builder(
-                    itemCount: departures.keys.length,
+                    itemCount: response.departures.length,
                     itemBuilder: (context, index) {
+                      final departure = response.departures.elementAt(index);
+                      final route =
+                          response.routes[departure.routeId.toString()];
+                      // final
+
                       return AnimationConfiguration.staggeredList(
                         position: index,
                         duration: const Duration(milliseconds: 375),
@@ -61,11 +66,10 @@ class StopDeparturesPage extends StatelessWidget {
                             child: ListTile(
                               leading: Column(children: <Widget>[
                                 RouteIcon(stop.routeType),
-                                Text(
-                                    'routeNum:') //  ${response.routes[routeId.toString()].routeName}
+                                Text('${route.routeNumber}')
                               ]),
-                              title: Text('time to directionName'),
-                              subtitle: Text('routeName'),
+                              title: Text('time to '),
+                              subtitle: Text('${route.routeName}'),
                               onTap: () {
                                 // StoreProvider.of<AppState>(context).dispatch(
                                 //     ActionStoreNamedRoute(routeName: 'second'));

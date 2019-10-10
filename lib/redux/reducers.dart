@@ -12,7 +12,7 @@ final AppState Function(AppState, dynamic) appStateReducer =
   TypedReducer<AppState, ActionStoreStopDepartures>(_storeStopDepartures),
   TypedReducer<AppState, ActionStoreLocation>(_storeLocation),
   TypedReducer<AppState, ActionStoreNearbyStops>(_storeNearbyStops),
-  TypedReducer<AppState, ActionStoreRoutes>(_storeRoutes),
+  TypedReducer<AppState, ActionStoreRoutes>(_storeStopRoutes),
 ]);
 
 //
@@ -21,12 +21,6 @@ AppState _storeHome(AppState state, ActionStoreHome action) =>
 
 AppState _addProblem(AppState state, ActionAddProblem action) =>
     state.rebuild((b) => b..problems.add(action.problem));
-
-AppState _storeStopDepartures(
-        AppState state, ActionStoreStopDepartures action) =>
-    state.rebuild((b) => b
-      ..stopDepartures.updateValue(action.stopId, (response) => action.response,
-          ifAbsent: () => action.response));
 
 AppState _storeLocation(AppState state, ActionStoreLocation action) =>
     state.rebuild((b) => b
@@ -37,7 +31,13 @@ AppState _storeLocation(AppState state, ActionStoreLocation action) =>
 AppState _storeNearbyStops(AppState state, ActionStoreNearbyStops action) =>
     state.rebuild((b) => b..nearbyStops = action.nearbyStops.toBuilder());
 
-AppState _storeRoutes(AppState state, ActionStoreRoutes action) {
+AppState _storeStopDepartures(
+        AppState state, ActionStoreStopDepartures action) =>
+    state.rebuild(
+      (b) => b..stopDepartures = action.response.toBuilder(),
+    );
+
+AppState _storeStopRoutes(AppState state, ActionStoreRoutes action) {
   final routesById = Map<int, V3RouteWithStatus>();
   for (V3RouteWithStatus route in action.response.routes) {
     routesById[route.routeId] = route;
