@@ -10,7 +10,6 @@ import 'package:ptv_api_client/model/v3_stops_by_distance_response.dart';
 import 'package:ptv_clone/models/location.dart';
 import 'package:ptv_clone/models/problem.dart';
 import 'package:ptv_clone/models/serializers.dart';
-import 'package:ptv_clone/models/stop_departures_view_model.dart';
 
 part 'app_state.g.dart';
 
@@ -25,44 +24,22 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   Location get location;
   BuiltMap<int, V3RouteWithStatus> get routesById;
   V3StopsByDistanceResponse get nearbyStops;
-  StopDeparturesViewModel get stopDeparturesViewModel;
-  BuiltMap<int, BuiltList<V3Departure>> get departuresByRoute;
-  BuiltMap<String, V3DeparturesResponse> get departureDetailsByRoute;
+  BuiltMap<int, V3DeparturesResponse> get stopDepartures;
 
-  static AppState initialState() => AppState((b) => b
-    ..homeIndex = 0
-    ..problems = ListBuilder<Problem>()
-    ..location.latitude = 0
-    ..location.longitude = 0
-    ..location.timestamp = DateTime.now().toUtc()
-    ..routesById = MapBuilder<int, V3RouteWithStatus>()
-    ..nearbyStops.disruptions = MapBuilder<String, V3Disruption>()
-    ..nearbyStops.status.health = 0
-    ..nearbyStops.status.version = ''
-    ..nearbyStops.stops = ListBuilder<V3StopGeosearch>()
-    ..stopDeparturesViewModel.departuresResponse.status.health = 0
-    ..stopDeparturesViewModel.departuresResponse.status.version = ''
-    ..stopDeparturesViewModel.departuresResponse.departures =
-        ListBuilder<V3Departure>()
-    ..stopDeparturesViewModel.departuresResponse.directions =
-        MapBuilder<String, V3Direction>()
-    ..stopDeparturesViewModel.departuresResponse.disruptions =
-        MapBuilder<String, V3Disruption>()
-    ..stopDeparturesViewModel.departuresResponse.routes =
-        MapBuilder<String, V3Route>()
-    ..stopDeparturesViewModel.departuresResponse.runs =
-        MapBuilder<String, V3Run>()
-    ..stopDeparturesViewModel.departuresResponse.stops =
-        MapBuilder<String, V3ResultStop>()
-    ..stopDeparturesViewModel.nextDepartures = ListBuilder<V3Departure>()
-    ..stopDeparturesViewModel.routeIds = ListBuilder<int>()
-    ..stopDeparturesViewModel.routes = ListBuilder<V3Route>()
-    ..stopDeparturesViewModel.timeStrings = ListBuilder<String>()
-    ..stopDeparturesViewModel.todaysDepartures =
-        ListBuilder<BuiltList<V3Departure>>()
-    ..stopDeparturesViewModel.numDepartures = 0
-    ..departuresByRoute = MapBuilder<int, BuiltList<V3Departure>>()
-    ..departureDetailsByRoute = MapBuilder<String, V3DeparturesResponse>());
+  static AppState initialState() => AppState(
+        (b) => b
+          ..homeIndex = 0
+          ..problems = ListBuilder<Problem>()
+          ..location.latitude = 0
+          ..location.longitude = 0
+          ..location.timestamp = DateTime.now().toUtc()
+          ..routesById = MapBuilder<int, V3RouteWithStatus>()
+          ..nearbyStops.disruptions = MapBuilder<String, V3Disruption>()
+          ..nearbyStops.status.health = 0
+          ..nearbyStops.status.version = ''
+          ..nearbyStops.stops = ListBuilder<V3StopGeosearch>()
+          ..stopDepartures = MapBuilder<int, V3DeparturesResponse>(),
+      );
 
   AppState._();
 

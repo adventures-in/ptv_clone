@@ -1,10 +1,10 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:ptv_api_client/api.dart';
 import 'package:ptv_api_client/model/v3_stop_geosearch.dart';
 import 'package:ptv_clone/models/app_state.dart';
-import 'package:ptv_clone/models/stop_departures_view_model.dart';
 import 'package:ptv_clone/widgets/shared.dart';
 
 class StopDeparturesPage extends StatelessWidget {
@@ -45,20 +45,13 @@ class StopDeparturesPage extends StatelessWidget {
               ],
             ),
           ),
-          StoreConnector<AppState, StopDeparturesViewModel>(
-            converter: (store) => store.state.stopDeparturesViewModel,
-            builder: (context, viewmodel) {
+          StoreConnector<AppState, BuiltMap<int, V3DeparturesResponse>>(
+            converter: (store) => store.state.stopDepartures,
+            builder: (context, departures) {
               return Expanded(
                 child: ListView.builder(
-                    itemCount: viewmodel.numDepartures,
+                    itemCount: departures.keys.length,
                     itemBuilder: (context, index) {
-                      final routeId = viewmodel.routeIds.elementAt(index);
-                      V3RouteWithStatus route =
-                          StoreProvider.of<AppState>(context)
-                              .state
-                              .routesById[routeId];
-                      V3Departure nextDeparture =
-                          viewmodel.nextDepartures.elementAt(index);
                       return AnimationConfiguration.staggeredList(
                         position: index,
                         duration: const Duration(milliseconds: 375),
@@ -68,11 +61,11 @@ class StopDeparturesPage extends StatelessWidget {
                             child: ListTile(
                               leading: Column(children: <Widget>[
                                 RouteIcon(stop.routeType),
-                                Text(route.routeNumber)
+                                Text(
+                                    'routeNum:') //  ${response.routes[routeId.toString()].routeName}
                               ]),
-                              title: Text(
-                                  '${viewmodel.timeStrings.elementAt(index)} to ${viewmodel.directionNames.elementAt(index)}'),
-                              subtitle: Text('${route.routeName}'),
+                              title: Text('time to directionName'),
+                              subtitle: Text('routeName'),
                               onTap: () {
                                 // StoreProvider.of<AppState>(context).dispatch(
                                 //     ActionStoreNamedRoute(routeName: 'second'));
@@ -87,7 +80,7 @@ class StopDeparturesPage extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(5.0)),
                                 onPressed: () {},
                                 child: Text(
-                                  '${viewmodel.timeStrings.elementAt(index)}', //
+                                  'time',
                                   style: TextStyle(fontSize: 20.0),
                                 ),
                               ),

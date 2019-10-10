@@ -15,7 +15,7 @@ import 'package:redux_remote_devtools/redux_remote_devtools.dart';
 
 void main() async {
   final RemoteDevToolsMiddleware remoteDevtools =
-      RemoteDevToolsMiddleware(iphone_ip);
+      RemoteDevToolsMiddleware(iphone_wifi_ip);
   await remoteDevtools.connect();
 
   final departuresApi = DeparturesApi();

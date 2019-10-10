@@ -1,8 +1,6 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:ptv_api_client/model/v3_departure.dart';
 import 'package:ptv_api_client/model/v3_route_with_status.dart';
 import 'package:ptv_clone/models/app_state.dart';
-import 'package:ptv_clone/models/stop_departures_view_model.dart';
 import 'package:ptv_clone/redux/actions.dart';
 import 'package:redux/redux.dart';
 
@@ -25,10 +23,10 @@ AppState _addProblem(AppState state, ActionAddProblem action) =>
     state.rebuild((b) => b..problems.add(action.problem));
 
 AppState _storeStopDepartures(
-    AppState state, ActionStoreStopDepartures action) {
-  return state.rebuild(
-      (b) => b..stopDeparturesViewModel = action.viewmodel.toBuilder());
-}
+        AppState state, ActionStoreStopDepartures action) =>
+    state.rebuild((b) => b
+      ..stopDepartures.updateValue(action.stopId, (response) => action.response,
+          ifAbsent: () => action.response));
 
 AppState _storeLocation(AppState state, ActionStoreLocation action) =>
     state.rebuild((b) => b

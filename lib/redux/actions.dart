@@ -6,7 +6,6 @@ import 'package:ptv_api_client/model/v3_stop_response.dart';
 import 'package:ptv_api_client/model/v3_stops_by_distance_response.dart';
 import 'package:ptv_clone/models/location.dart';
 import 'package:ptv_clone/models/problem.dart';
-import 'package:ptv_clone/models/stop_departures_view_model.dart';
 
 class Action {
   const Action(this.propsMap);
@@ -80,9 +79,10 @@ class ActionGetStopDepartures extends Action {
 }
 
 class ActionStoreStopDepartures extends Action {
-  ActionStoreStopDepartures({@required this.viewmodel})
-      : super(<String, Object>{'viewmodel': viewmodel});
-  final StopDeparturesViewModel viewmodel;
+  ActionStoreStopDepartures({@required this.stopId, @required this.response})
+      : super(<String, Object>{'response': response});
+  final int stopId;
+  final V3DeparturesResponse response;
 }
 
 class ActionGetDeparturesForRoute extends Action {
