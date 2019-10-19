@@ -22,6 +22,7 @@ import 'package:ptv_api_client/model/v3_vehicle_position.dart';
 import 'package:ptv_clone/models/app_state.dart';
 import 'package:ptv_clone/models/location.dart';
 import 'package:ptv_clone/models/problem.dart';
+import 'package:ptv_clone/models/stop_departure_item.dart';
 
 part 'serializers.g.dart';
 

@@ -38,7 +38,7 @@ class ActionObserveLocation extends Action {
 
 class ActionStoreLocation extends Action {
   ActionStoreLocation({@required this.location})
-      : super(<String, Object>{'latitude': location});
+      : super(<String, Object>{'location': location});
   final Location location;
 }
 

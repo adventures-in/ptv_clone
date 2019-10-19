@@ -1,6 +1,8 @@
 import 'package:built_collection/built_collection.dart';
+import 'package:ptv_api_client/api.dart';
 import 'package:ptv_api_client/model/v3_route_with_status.dart';
 import 'package:ptv_clone/models/app_state.dart';
+import 'package:ptv_clone/models/stop_departure_item.dart';
 import 'package:ptv_clone/redux/actions.dart';
 import 'package:redux/redux.dart';
 
@@ -32,10 +34,35 @@ AppState _storeNearbyStops(AppState state, ActionStoreNearbyStops action) =>
     state.rebuild((b) => b..nearbyStops = action.nearbyStops.toBuilder());
 
 AppState _storeStopDepartures(
-        AppState state, ActionStoreStopDepartures action) =>
-    state.rebuild(
-      (b) => b..stopDepartures = action.response.toBuilder(),
+    AppState state, ActionStoreStopDepartures action) {
+  BuiltList<StopDepartureItem> items = ListBuilder<StopDepartureItem>().build();
+  for (V3Departure departure in action.response.departures) {
+    final route = action.response.routes[departure.routeId.toString()];
+    final run = action.response.runs[departure.runId.toString()];
+    final scheduledTime = departure.scheduledDepartureUtc.toLocal();
+    final scheduledHour = scheduledTime.hour;
+    final scheduledMins = scheduledTime.minute;
+    items.rebuild(
+      (b) => b
+        ..add(
+          StopDepartureItem(
+            (b) => b
+              ..routeName = route.routeName
+              ..routeNumber = route.routeNumber
+              ..destinationName = run.destinationName
+              ..scheduledTime =
+                  '${scheduledHour.toString().padLeft(2)}:${scheduledMins.toString().padLeft(2)}',
+          ),
+        ),
     );
+  }
+
+  return state.rebuild(
+    (b) => b
+      ..stopDeparturesResponse = action.response.toBuilder()
+      ..stopDeparturesViewModel = items.toBuilder(),
+  );
+}
 
 AppState _storeStopRoutes(AppState state, ActionStoreRoutes action) {
   final routesById = Map<int, V3RouteWithStatus>();

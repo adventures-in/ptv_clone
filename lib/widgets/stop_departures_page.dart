@@ -5,6 +5,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:ptv_api_client/api.dart';
 import 'package:ptv_api_client/model/v3_stop_geosearch.dart';
 import 'package:ptv_clone/models/app_state.dart';
+import 'package:ptv_clone/models/stop_departure_item.dart';
 import 'package:ptv_clone/widgets/shared.dart';
 
 class StopDeparturesPage extends StatelessWidget {
@@ -45,17 +46,14 @@ class StopDeparturesPage extends StatelessWidget {
               ],
             ),
           ),
-          StoreConnector<AppState, V3DeparturesResponse>(
-            converter: (store) => store.state.stopDepartures,
-            builder: (context, response) {
+          StoreConnector<AppState, BuiltList<StopDepartureItem>>(
+            converter: (store) => store.state.stopDeparturesViewModel,
+            builder: (context, viewModel) {
               return Expanded(
                 child: ListView.builder(
-                    itemCount: response.departures.length,
+                    itemCount: viewModel.length,
                     itemBuilder: (context, index) {
-                      final departure = response.departures.elementAt(index);
-                      final route =
-                          response.routes[departure.routeId.toString()];
-                      // final
+                      final departureItem = viewModel.elementAt(index);
 
                       return AnimationConfiguration.staggeredList(
                         position: index,
@@ -66,10 +64,11 @@ class StopDeparturesPage extends StatelessWidget {
                             child: ListTile(
                               leading: Column(children: <Widget>[
                                 RouteIcon(stop.routeType),
-                                Text('${route.routeNumber}')
+                                Text('${departureItem.routeNumber}')
                               ]),
-                              title: Text('time to '),
-                              subtitle: Text('${route.routeName}'),
+                              title: Text(
+                                  '${departureItem.scheduledTime} to ${departureItem.destinationName}'),
+                              subtitle: Text('${departureItem.routeName}'),
                               onTap: () {
                                 // StoreProvider.of<AppState>(context).dispatch(
                                 //     ActionStoreNamedRoute(routeName: 'second'));
