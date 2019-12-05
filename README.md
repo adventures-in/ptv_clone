@@ -77,7 +77,7 @@ We can automate writing the boilerplate using code snippets.  For example in VSC
           "\tfactory ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}([updates(${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}Builder b)]) = _$${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g};",
           "",
           "\tString toJson() {",
-          "\t\treturn json.encode(serializers.serializeWith(${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}.serializer, this));",
+          "\t\treturn serializers.serializeWith(${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}.serializer, this);",
           "\t}",
           "",
           "",
